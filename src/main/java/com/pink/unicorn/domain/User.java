@@ -1,5 +1,7 @@
 package com.pink.unicorn.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -7,21 +9,25 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "_USERS")
+@Table(name = "USERS")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "EMAIL", nullable = false)
+    @JsonProperty("email")
     private String email;
 
     @Column(name = "PASSWORD", nullable = false)
+    @JsonProperty("password")
     private String password;
 
     @Column(name = "PHONE")
+    @JsonProperty("phone")
     private String phone;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -32,6 +38,7 @@ public class User {
     @ElementCollection(targetClass = Product.class, fetch = FetchType.EAGER)
     @CollectionTable(name="PRODUCT", joinColumns=@JoinColumn(name="PRODUCT_ID"))
     @Column(name="WISH_LIST")
+    @JsonProperty("wishlist")
     private List<Product> wishList;
 
     public Long getId() {
