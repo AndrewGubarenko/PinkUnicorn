@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * @author Andrii Hubarenko
+ * <p>The entity of order. Contains the list of products, user is going to buy, contact and delivery information.</p>
+ */
 @Entity
 @Table(name = "ORDERS")
 public class Order {

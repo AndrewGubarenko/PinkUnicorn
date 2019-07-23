@@ -3,6 +3,10 @@ package com.pink.unicorn.domain;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * @author Andrii Hubarenko
+ * <p>The entity of article.</p>
+ */
 @Entity
 @Table(name = "ARTICLES")
 public class Article {

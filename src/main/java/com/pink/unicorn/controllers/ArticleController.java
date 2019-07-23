@@ -1,10 +1,9 @@
 package com.pink.unicorn.controllers;
 
 import com.pink.unicorn.exceptions.EmptyDataException;
-import com.pink.unicorn.services.UserService;
+import com.pink.unicorn.services.ArticleService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,67 +13,57 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
  *@author Andrii Hubarenko
- * <p>Rest Controller for processing user's requests</p>
+ * <p>Rest Controller for processing articles's requests</p>
  */
 @RestController
-public class UserController {
+public class ArticleController {
 
-    private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
-    private final UserService userService;
+    private static final Logger LOGGER = Logger.getLogger(ArticleController.class.getSimpleName());
+    private final ArticleService articleService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
     }
 
-    @PostMapping(path = "/user/registration", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> registration(@RequestBody String user) throws IOException, EmptyDataException {
-        String response = userService.create(user);
+    @PostMapping(path = "/admin/articles/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> createArticle(@RequestBody String article) throws IOException, EmptyDataException {
+        String response = articleService.create(article);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping(path = "/user/authentication")
-    public ResponseEntity<String> authenticate(@RequestBody String authData) throws IOException, EmptyDataException{
-        String respond = userService.findByEmailAndPassword(authData);
-
-        return ResponseEntity.status(HttpStatus.OK).body(respond);
-
-    }
-
-    @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> getUser(@PathVariable Long id) {
-        String response = userService.get(id);
+    @GetMapping(path = "/articles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<String>> getListOfArticles() {
+        List<String> response = articleService.getListOfArticles();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping(path = "/user/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> updateUser(@RequestBody String user, @PathVariable Long id) throws IOException {
-        String response = userService.update(user, id);
+    @GetMapping(path = "/articles/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> getArticle(@PathVariable Long id) {
+        String response = articleService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping(path = "/user/{id}/delete")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        String response = userService.delete(id);
+    @PutMapping(path = "/articles/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> updateArticle(@RequestBody String article, @PathVariable Long id) throws IOException {
+        String response = articleService.update(article, id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping(path = "/articles/{id}/delete")
+    public ResponseEntity<String> deleteArticle(@PathVariable Long id) {
+        String response = articleService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
      * Exceptions handling
      */
-    @ExceptionHandler
-    public ResponseEntity<String> onConflictingUserEmail(DataIntegrityViolationException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": User with such email already registered."
-                + "/ "
-                + e.getLocalizedMessage());
-    }
-
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
@@ -85,7 +74,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> onMissingUser(EmptyResultDataAccessException e) {
+    public ResponseEntity<String> onMissingArticle(EmptyResultDataAccessException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
                 + ": No such element was found"
@@ -93,10 +82,10 @@ public class UserController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> onMissingUserId(NoSuchElementException e) {
+    public ResponseEntity<String> onMissingArticleId(NoSuchElementException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
-                + ": No such user was found"
+                + ": No such article was found"
                 + "/ ");
     }
 

@@ -1,6 +1,5 @@
 package com.pink.unicorn.services;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pink.unicorn.domain.Role;
@@ -78,7 +77,6 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public String get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
@@ -90,7 +88,15 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional(readOnly = true)
-    public String findByEmailAndPassword(String email, String password) {
+    public String findByEmailAndPassword(String authData) throws IOException, EmptyDataException{
+        JsonNode rootNode = objectMapper.readTree(authData);
+        if (rootNode.path("email").asText().equals("")) {
+            throw new EmptyDataException("Empty EMAIL field");
+        } else if (rootNode.path("password").asText().equals("")) {
+            throw new EmptyDataException("Empty PASSWORD field");
+        }
+        String email = rootNode.path("email").asText().toLowerCase();
+        String password = rootNode.path("password").asText();
         Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(email, password);
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();

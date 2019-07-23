@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Andrii Hubarenko
+ * <p>The entity of product.</p>
+ */
 @Entity
 @Table(name = "PRODUCTS")
 public class Product {

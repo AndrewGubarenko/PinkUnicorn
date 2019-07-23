@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Andrii Hubarenko
- * Entity of user. The ordinal user, who can register and uses the privileges of personal account, like wish list, order history etc.
+ * <p>The entity of user. The ordinal user, who can register and uses the privileges of personal account, like wish list, order history etc.</p>
  */
 @Entity
 @Table(name = "USERS")

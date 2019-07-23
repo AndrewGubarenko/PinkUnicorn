@@ -6,6 +6,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Andrii Hubarenko
+ * <p>The entity of tag. Used for dividing the products into categories.</p>
+ */
 @Entity
 @Table(name = "TAG")
 public class Tag {

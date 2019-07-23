@@ -2,55 +2,50 @@ package com.pink.unicorn.services;
 
 import com.pink.unicorn.exceptions.EmptyDataException;
 
-import java.io.IOException;
-import java.util.NoSuchElementException;
-
 /**
  * @author Andrii Hubarenko
- * This interface explains the main methods, that must be implemented by any class of user services, to get a completely workable application.
+ * <p>This interface explains the main methods, that must be implemented by any class of User services, to get a completely workable application.</p>
  */
 public interface IUserService {
 
     /**
+     * <p>Method for creating user.</p>
      * @param user
      * @return JSON string of user
-     * @throws IOException
      * @throws EmptyDataException
      */
-    String create(String user) throws IOException, EmptyDataException;
+    String create(String user) throws Exception;
 
     /**
-     * Method for updating user's data
+     * <p>Method for updating user's data</p>
      * @param user
      * @param id
      * @return updated user in JSON format
-     * @throws IOException
-     * @throws NoSuchElementException
+     * @throws Exception
      */
-    String update(String user, Long id) throws IOException;
+    String update(String user, Long id) throws Exception;
 
     /**
-     * Method for getting user
+     * <p>Method for getting user</p>
      * @param id
      * @return user in JSON format
-     * @throws NoSuchElementException
+     * @throws Exception
      */
-    String get(Long id);
+    String get(Long id) throws Exception;
 
     /**
-     * Method uses for searching of user by registration parameters, usually for authentication
-     * @param email
-     * @param password
+     * <p>Method uses for searching of user by registration parameters, usually for authentication</p>
+     * @param authData
      * @return user in JSON format
-     * @throws NoSuchElementException
+     * @throws Exception
      */
-    String findByEmailAndPassword(String email, String password);
+    String findByEmailAndPassword(String authData) throws Exception;
 
     /**
-     * Method for deleting user
+     * <p>Method for deleting user</p>
      * @param id
      * @return String message about success deleting
-     * @throws NoSuchElementException
+     * @throws Exception
      */
-    String delete(Long id);
+    String delete(Long id) throws Exception;
 }

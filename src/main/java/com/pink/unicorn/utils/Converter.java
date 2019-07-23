@@ -1,5 +1,6 @@
 package com.pink.unicorn.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +21,7 @@ public class Converter {
     public Converter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public String ObjectToJSON(Object object) {
         String response;
         try {
