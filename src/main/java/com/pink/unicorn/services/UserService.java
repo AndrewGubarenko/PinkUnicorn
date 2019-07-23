@@ -5,28 +5,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pink.unicorn.domain.Role;
 import com.pink.unicorn.domain.User;
+import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.UserRepository;
 import com.pink.unicorn.utils.Converter;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
 /**
- *
  * @author Andrii Hubarenko
  * <p>This class implements an interfase IUserService</p>
- *
  */
 @Service
 public class UserService implements IUserService{
-
-    private static final Logger LOGGER = Logger.getLogger(UserService.class.getSimpleName());
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
@@ -43,23 +40,20 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public String create(String user) {
-        JsonNode rootNode;
-        try {
-            rootNode = objectMapper.readTree(user);
-        } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
-            return "IOException of JSON";
+    public String create(String user) throws IOException, EmptyDataException {
+        JsonNode rootNode = objectMapper.readTree(user);
+        if (rootNode.path("email").asText().equals("")) {
+            throw new EmptyDataException("Empty EMAIL field");
+        } else if (rootNode.path("password").asText().equals("")) {
+            throw new EmptyDataException("Empty PASSWORD field");
         }
         User newUser = new User();
-
-        newUser.setEmail(rootNode.path("email").asText());
+        newUser.setEmail(rootNode.path("email").asText().toLowerCase());
         newUser.setPassword(rootNode.path("password").asText());
         newUser.setPhone(rootNode.path("phone").asText());
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
         newUser.setRoles(roles);
-
         userRepository.save(newUser);
 
         return converter.ObjectToJSON(newUser);
@@ -67,25 +61,19 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public String update(String updatedUser, Long id) {
+    public String update(String updatedUser, Long id) throws IOException {
         Optional<User> userForUpdateOpt = userRepository.findById(id);
-        if (userForUpdateOpt.isPresent()) {
-            JsonNode rootNode;
-            try {
-                rootNode = objectMapper.readTree(updatedUser);
-            } catch (IOException e) {
-                LOGGER.warn(e.getMessage());
-                return "IOException of JSON";
-            }
-            User userForUpdate = userForUpdateOpt.get();
-            userForUpdate.setPassword(rootNode.path("password").asText());
-            userForUpdate.setPhone(rootNode.path("phone").asText());
-
-            userRepository.save(userForUpdate);
-
-            return converter.ObjectToJSON(userForUpdate);
+        if (!userForUpdateOpt.isPresent()) {
+            throw new NoSuchElementException();
         }
-        return "Something wrong! Unable to update user's data";
+        JsonNode rootNode = objectMapper.readTree(updatedUser);
+        User userForUpdate = userForUpdateOpt.get();
+        userForUpdate.setPassword(rootNode.path("password").asText());
+        userForUpdate.setPhone(rootNode.path("phone").asText());
+
+        userRepository.save(userForUpdate);
+
+        return converter.ObjectToJSON(userForUpdate);
     }
 
     @Override
@@ -93,26 +81,33 @@ public class UserService implements IUserService{
     @JsonIgnoreProperties(ignoreUnknown = true)
     public String get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
-        if(foundUserOpt.isPresent()) {
-            User result = foundUserOpt.get();
-            return converter.ObjectToJSON(result);
+        if (!foundUserOpt.isPresent()) {
+            throw new NoSuchElementException();
         }
-        return "Something wrong! Unable to find such user";
+        User result = foundUserOpt.get();
+        return converter.ObjectToJSON(result);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String findByEmailAndPassword(String email, String password) {
+        Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(email, password);
+        if (!foundUserOpt.isPresent()) {
+            throw new NoSuchElementException();
+        }
+        return converter.ObjectToJSON(foundUserOpt.get());
     }
 
     @Override
     @Transactional
     public String delete(Long id) {
-        String message;
         Optional<User> userForDeleteOpt = userRepository.findById(id);
-        if(userForDeleteOpt.isPresent()) {
-            String userEmail = userForDeleteOpt.get().getEmail();
-            userRepository.delete(userForDeleteOpt.get());
-            message = "User with email " + userEmail + " was completely removed";
-        } else {
-            message = "Something wrong. User deleting is unable";
+        if (!userForDeleteOpt.isPresent()) {
+            throw new NoSuchElementException();
         }
-        return message;
+        String userEmail = userForDeleteOpt.get().getEmail();
+        userRepository.delete(userForDeleteOpt.get());
+        return "User with email " + userEmail + " was completely removed";
     }
 
 }

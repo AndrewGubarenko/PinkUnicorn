@@ -8,6 +8,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Andrii Hubarenko
+ * Entity of user. The ordinal user, who can register and uses the privileges of personal account, like wish list, order history etc.
+ */
 @Entity
 @Table(name = "USERS")
 public class User {
@@ -18,7 +22,7 @@ public class User {
     @JsonProperty("id")
     private Long id;
 
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "EMAIL", nullable = false, unique = true)
     @JsonProperty("email")
     private String email;
 
