@@ -15,25 +15,31 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Long id;
+    private long id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
+
+    @Column(name = "CATEGORY", nullable = false)
+    private String category;
+
+    @Column(name = "BRAND", nullable = false)
+    private String brand;
 
     @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "IS_IN_SALE", nullable = false)
-    private Boolean isInSale;
+    private boolean isInSale;
 
     @Column(name = "PRICE")
-    private Double price;
+    private double price;
 
     @Column(name = "SALE_PRICE")
-    private Double salePrice;
+    private double salePrice;
 
     @Column(name = "COUNT")
-    private Integer count;
+    private int count;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "PRODUCT_PHOTO", joinColumns = @JoinColumn(name = "PRODUCT_ID"))
@@ -44,11 +50,11 @@ public class Product {
     @JoinTable(name = "PRODUCT_TAG", joinColumns = @JoinColumn(name = "PRODUCT_TAG"), inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
     private Set<Tag> tags = new HashSet<>();
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,6 +66,22 @@ public class Product {
         this.name = name;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -68,35 +90,35 @@ public class Product {
         this.description = description;
     }
 
-    public Boolean getInSale() {
+    public boolean isInSale() {
         return isInSale;
     }
 
-    public void setInSale(Boolean inSale) {
+    public void setInSale(boolean inSale) {
         isInSale = inSale;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public Double getSalePrice() {
+    public double getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(Double salePrice) {
+    public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
     }
 
-    public Integer getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
@@ -106,6 +128,11 @@ public class Product {
 
     public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.removeAllTags();
+        tags.forEach(this::addTag);
     }
 
     public Set<Tag> getTags() {
@@ -123,11 +150,6 @@ public class Product {
         }
 
         tag.addTodo(this, true);
-    }
-
-    public void setTags(Collection<Tag> tags) {
-        this.removeAllTags();
-        tags.forEach(this::addTag);
     }
 
     public void removeAllTags() {
@@ -151,13 +173,38 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
                 ", description='" + description + '\'' +
                 ", isInSale=" + isInSale +
                 ", price=" + price +
                 ", salePrice=" + salePrice +
                 ", count=" + count +
-                ", photos=" + photos.stream().collect(Collectors.joining(",")) +
-                ", tags=" + tags.stream().map(Tag::toString).collect(Collectors.joining(",")) +
+                ", photos=" + photos +
+                ", tags=" + tags +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return id == product.id &&
+                isInSale == product.isInSale &&
+                Double.compare(product.price, price) == 0 &&
+                Double.compare(product.salePrice, salePrice) == 0 &&
+                count == product.count &&
+                name.equals(product.name) &&
+                category.equals(product.category) &&
+                brand.equals(product.brand) &&
+                description.equals(product.description) &&
+                Objects.equals(photos, product.photos) &&
+                Objects.equals(tags, product.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, category, brand, description, isInSale, price, salePrice, count, photos, tags);
     }
 }

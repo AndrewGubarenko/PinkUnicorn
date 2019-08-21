@@ -69,52 +69,36 @@ public class UserController {
     @ExceptionHandler
     public ResponseEntity<String> onConflictingUserEmail(DataIntegrityViolationException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": User with such email already registered."
-                + "/ "
-                + e.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": User with such email already registered.");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": One or more data`s fields are empty."
-                + "/ "
-                + e.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": One or more data`s fields are empty.");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingUser(EmptyResultDataAccessException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
-                + ": No such element was found"
-                + "/ ");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such user was found");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingUserId(NoSuchElementException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
-                + ": No such user was found"
-                + "/ ");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such user was found");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleIOException(IOException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": Check the arguments!"
-                + "/ "
-                + e.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": Check the arguments!");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleSQLException(SQLException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": SQL statement problem"
-                + "/ "
-                + e.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": SQL statement problem");
     }
 }

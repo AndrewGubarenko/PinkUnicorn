@@ -3,16 +3,18 @@ package com.pink.unicorn.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 
     @Transactional
-    public String create(String product) {
+    public String createProduct(String product) {
         return null;
     }
 
     @Transactional
-    public String update(String product, Long id) {
+    public String updateProduct(String product, Long id) {
         return null;
     }
 
@@ -22,17 +24,17 @@ public class ProductService {
     }
 
     @Transactional
-    public String getProductList() {
+    public String getProductList(List<String> tags) {
         return null;
     }
 
     @Transactional
-    public String getProductListByFilters(String...filters) {
+    public String getProductListByTags(String...filters) {
         return null;
     }
 
     @Transactional
-    public String delete(Long id) {
+    public String deleteProduct(Long id) {
         return null;
     }
 }
