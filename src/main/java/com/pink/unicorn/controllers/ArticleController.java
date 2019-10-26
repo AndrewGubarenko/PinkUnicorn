@@ -1,3 +1,4 @@
+/*
 package com.pink.unicorn.controllers;
 
 import com.pink.unicorn.exceptions.EmptyDataException;
@@ -16,10 +17,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+*/
 /**
  *@author Andrii Hubarenko
  * <p>Rest Controller for processing articles's requests</p>
- */
+ *//*
+
 @RestController
 public class ArticleController {
 
@@ -61,9 +64,11 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    /**
+    */
+/**
      * Exceptions handling
-     */
+     *//*
+
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
@@ -107,3 +112,4 @@ public class ArticleController {
                 + e.getLocalizedMessage());
     }
 }
+*/

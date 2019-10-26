@@ -1,5 +1,6 @@
 package com.pink.unicorn.services;
 
+import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.exceptions.EmptyDataException;
 
 /**
@@ -14,7 +15,7 @@ public interface IUserService {
      * @return JSON string of user
      * @throws EmptyDataException
      */
-    String create(String user) throws Exception;
+    PlainUser create(PlainUser user) throws Exception;
 
     /**
      * <p>Method for updating user's data</p>
@@ -23,7 +24,7 @@ public interface IUserService {
      * @return updated user in JSON format
      * @throws Exception
      */
-    String update(String user, Long id) throws Exception;
+    PlainUser update(PlainUser user, Long id) throws Exception;
 
     /**
      * <p>Method for getting user</p>
@@ -31,7 +32,7 @@ public interface IUserService {
      * @return user in JSON format
      * @throws Exception
      */
-    String get(Long id) throws Exception;
+    PlainUser get(Long id) throws Exception;
 
     /**
      * <p>Method uses for searching of user by registration parameters, usually for authentication</p>
@@ -39,7 +40,7 @@ public interface IUserService {
      * @return user in JSON format
      * @throws Exception
      */
-    String findByEmailAndPassword(String authData) throws Exception;
+    PlainUser findByEmailAndPassword(String authData) throws Exception;
 
     /**
      * <p>Method for deleting user</p>

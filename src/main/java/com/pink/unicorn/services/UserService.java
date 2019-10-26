@@ -2,11 +2,12 @@ package com.pink.unicorn.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.domain.Role;
 import com.pink.unicorn.domain.User;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.UserRepository;
-import com.pink.unicorn.utils.Converter;
+import com.pink.unicorn.utils.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,69 +27,60 @@ public class UserService implements IUserService{
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
-    private final Converter converter;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       ObjectMapper objectMapper,
-                       Converter converter) {
+                       ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
-        this.converter = converter;
     }
 
     @Override
     @Transactional
-    public String create(String user) throws IOException, EmptyDataException {
-        JsonNode rootNode = objectMapper.readTree(user);
-        if (rootNode.path("email").asText().equals("")) {
-            throw new EmptyDataException("Empty EMAIL field");
-        } else if (rootNode.path("password").asText().equals("")) {
-            throw new EmptyDataException("Empty PASSWORD field");
-        }
+    public PlainUser create(PlainUser plainUser) {
         User newUser = new User();
-        newUser.setEmail(rootNode.path("email").asText().toLowerCase());
-        newUser.setPassword(rootNode.path("password").asText());
-        newUser.setPhone(rootNode.path("phone").asText());
+
+        newUser.setEmail(plainUser.getEmail());
+        newUser.setPassword(plainUser.getPassword());
+        newUser.setPhone(plainUser.getPhone());
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
         newUser.setRoles(roles);
         userRepository.save(newUser);
 
-        return converter.ObjectToJSON(newUser);
+        return UserConverter.UserToPlain(newUser);
     }
 
     @Override
     @Transactional
-    public String update(String updatedUser, Long id) throws IOException {
+    public PlainUser update(PlainUser updatedPlaneUser, Long id) {
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
             throw new NoSuchElementException();
         }
-        JsonNode rootNode = objectMapper.readTree(updatedUser);
         User userForUpdate = userForUpdateOpt.get();
-        userForUpdate.setPassword(rootNode.path("password").asText());
-        userForUpdate.setPhone(rootNode.path("phone").asText());
+        userForUpdate.setPassword(updatedPlaneUser.getPassword());
+        userForUpdate.setPhone(updatedPlaneUser.getPhone());
 
         userRepository.save(userForUpdate);
 
-        return converter.ObjectToJSON(userForUpdate);
+        return UserConverter.UserToPlain(userForUpdate);
     }
 
     @Override
     @Transactional
-    public String get(Long id) {
+    public PlainUser get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();
         }
         User result = foundUserOpt.get();
-        return converter.ObjectToJSON(result);
+        return UserConverter.UserToPlain(result);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public String findByEmailAndPassword(String authData) throws IOException, EmptyDataException{
+    public PlainUser findByEmailAndPassword(String authData) throws IOException, EmptyDataException{
         JsonNode rootNode = objectMapper.readTree(authData);
         if (rootNode.path("email").asText().equals("")) {
             throw new EmptyDataException("Empty EMAIL field");
@@ -101,7 +93,7 @@ public class UserService implements IUserService{
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();
         }
-        return converter.ObjectToJSON(foundUserOpt.get());
+        return UserConverter.UserToPlain(foundUserOpt.get());
     }
 
     @Override

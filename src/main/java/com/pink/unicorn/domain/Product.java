@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
  * @author Andrii Hubarenko
  * <p>The entity of product.</p>
  */
+
 @Entity
 @Table(name = "PRODUCTS")
 public class Product {
@@ -23,6 +24,7 @@ public class Product {
     @Column(name = "CATEGORY", nullable = false)
     private String category;
 
+    //todo: check, should it be to be obligatory
     @Column(name = "BRAND", nullable = false)
     private String brand;
 
@@ -30,7 +32,7 @@ public class Product {
     private String description;
 
     @Column(name = "IS_IN_SALE", nullable = false)
-    private boolean isInSale;
+    private boolean inSale;
 
     @Column(name = "PRICE")
     private double price;
@@ -41,14 +43,15 @@ public class Product {
     @Column(name = "COUNT")
     private int count;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "PRODUCT_PHOTO", joinColumns = @JoinColumn(name = "PRODUCT_ID"))
-    @Column(name="PRODUCT_PHOTOS")
-    private List<String> photos;
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column
+    private List<Image> images = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "PRODUCT_TAG", joinColumns = @JoinColumn(name = "PRODUCT_TAG"), inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
-    private Set<Tag> tags = new HashSet<>();
+    @JoinTable(name = "PRODUCT_TAG", joinColumns = @JoinColumn(name = "PRODUCT_ID"), inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
+    private List<Tag> tags = new ArrayList<>();
+
+    public Product() {}
 
     public long getId() {
         return id;
@@ -91,11 +94,11 @@ public class Product {
     }
 
     public boolean isInSale() {
-        return isInSale;
+        return inSale;
     }
 
     public void setInSale(boolean inSale) {
-        isInSale = inSale;
+        this.inSale = inSale;
     }
 
     public double getPrice() {
@@ -122,21 +125,21 @@ public class Product {
         this.count = count;
     }
 
-    public List<String> getPhotos() {
-        return photos;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 
     public void setTags(Collection<Tag> tags) {
         this.removeAllTags();
         tags.forEach(this::addTag);
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
     }
 
     public void addTag(Tag tag) {
@@ -148,8 +151,7 @@ public class Product {
         if (otherSideWasAffected) {
             return;
         }
-
-        tag.addTodo(this, true);
+        tag.addProduct(this, true);
     }
 
     public void removeAllTags() {
@@ -165,46 +167,7 @@ public class Product {
         if (otherSideWasAffected) {
             return;
         }
-        tag.removeTodo(this, true);
+        tag.removeProduct(this, true);
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
-                ", brand='" + brand + '\'' +
-                ", description='" + description + '\'' +
-                ", isInSale=" + isInSale +
-                ", price=" + price +
-                ", salePrice=" + salePrice +
-                ", count=" + count +
-                ", photos=" + photos +
-                ", tags=" + tags +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Product)) return false;
-        Product product = (Product) o;
-        return id == product.id &&
-                isInSale == product.isInSale &&
-                Double.compare(product.price, price) == 0 &&
-                Double.compare(product.salePrice, salePrice) == 0 &&
-                count == product.count &&
-                name.equals(product.name) &&
-                category.equals(product.category) &&
-                brand.equals(product.brand) &&
-                description.equals(product.description) &&
-                Objects.equals(photos, product.photos) &&
-                Objects.equals(tags, product.tags);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, category, brand, description, isInSale, price, salePrice, count, photos, tags);
-    }
 }

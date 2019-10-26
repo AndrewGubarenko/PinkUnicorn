@@ -1,5 +1,6 @@
 package com.pink.unicorn.controllers;
 
+import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.services.UserService;
 import org.apache.log4j.Logger;
@@ -32,28 +33,28 @@ public class UserController {
     }
 
     @PostMapping(path = "/user/registration", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> registration(@RequestBody String user) throws IOException, EmptyDataException {
-        String response = userService.create(user);
+    public ResponseEntity<PlainUser> registration(@RequestBody PlainUser plainUser) {
+        PlainUser response = userService.create(plainUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(path = "/user/authentication")
-    public ResponseEntity<String> authenticate(@RequestBody String authData) throws IOException, EmptyDataException{
-        String respond = userService.findByEmailAndPassword(authData);
+    public ResponseEntity<PlainUser> authenticate(@RequestBody String authData) throws IOException, EmptyDataException{
+        PlainUser respond = userService.findByEmailAndPassword(authData);
 
         return ResponseEntity.status(HttpStatus.OK).body(respond);
 
     }
 
     @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> getUser(@PathVariable Long id) {
-        String response = userService.get(id);
+    public ResponseEntity<PlainUser> getUser(@PathVariable Long id) {
+        PlainUser response = userService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping(path = "/user/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> updateUser(@RequestBody String user, @PathVariable Long id) throws IOException {
-        String response = userService.update(user, id);
+    public ResponseEntity<PlainUser> updateUser(@RequestBody PlainUser plainUser, @PathVariable Long id) {
+        PlainUser response = userService.update(plainUser, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -1,3 +1,4 @@
+/*
 package com.pink.unicorn.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -5,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pink.unicorn.domain.Article;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.ArticleRepository;
-import com.pink.unicorn.utils.Converter;
+import com.pink.unicorn.utils.ProductConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +22,15 @@ public class ArticleService implements IArticleService {
 
     private final ArticleRepository articleRepository;
     private final ObjectMapper objectMapper;
-    private final Converter converter;
+    private final ProductConverter productConverter;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository,
-                       ObjectMapper objectMapper,
-                       Converter converter) {
+                          ObjectMapper objectMapper,
+                          ProductConverter productConverter) {
         this.articleRepository = articleRepository;
         this.objectMapper = objectMapper;
-        this.converter = converter;
+        this.productConverter = productConverter;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ArticleService implements IArticleService {
             throw new EmptyDataException("Empty TEXT OF ARTICLE field");
         }
 
-        return converter.ObjectToJSON(saveArticleData(article, new Article()));
+        return productConverter.ObjectToJSON(saveArticleData(article, new Article()));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ArticleService implements IArticleService {
             throw new NoSuchElementException();
         }
         Article foundArticle = foundArticleOpt.get();
-        return converter.ObjectToJSON(foundArticle);
+        return productConverter.ObjectToJSON(foundArticle);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class ArticleService implements IArticleService {
     public List<String> getListOfArticles() {
         Iterable<Article> listOfArticles = articleRepository.findAll();
         List<String> resultList = new ArrayList<>();
-        listOfArticles.forEach(article -> resultList.add(converter.ObjectToJSON(article)));
+        listOfArticles.forEach(article -> resultList.add(productConverter.ObjectToJSON(article)));
         return resultList;
     }
 
@@ -74,7 +75,7 @@ public class ArticleService implements IArticleService {
         if (!articleForUpdateOpt.isPresent()) {
             throw new NoSuchElementException();
         }
-        return converter.ObjectToJSON(saveArticleData(updatedArticle, articleForUpdateOpt.get()));
+        return productConverter.ObjectToJSON(saveArticleData(updatedArticle, articleForUpdateOpt.get()));
     }
 
     @Override
@@ -101,3 +102,4 @@ public class ArticleService implements IArticleService {
     }
 
 }
+*/
