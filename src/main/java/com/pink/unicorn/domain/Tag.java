@@ -2,9 +2,9 @@ package com.pink.unicorn.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Andrii Hubarenko
@@ -51,6 +51,8 @@ public class Tag {
     }
 
     public void setProductList(List<Product> productList) {
+        this.removeAllProducts();
+        productList.forEach(this::addProduct);
         this.productList = productList;
     }
 
@@ -76,6 +78,10 @@ public class Tag {
             return;
         }
         product.removeTag(this, true);
+    }
+
+    public void removeAllProducts() {
+        getProductList().stream().collect(Collectors.toList()).forEach(this::removeProduct);
     }
 
     @Override

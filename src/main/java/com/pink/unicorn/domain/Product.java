@@ -125,13 +125,46 @@ public class Product {
         this.count = count;
     }
 
+    /*------------------------------------------------------------------*/
+
     public List<Image> getImages() {
         return images;
     }
 
     public void setImages(List<Image> images) {
-        this.images = images;
+        this.removeAllImages();
+        images.forEach(this::addImage);
     }
+
+    public void addImage(Image image) {
+        addImage(image, false);
+    }
+
+    public void addImage(Image image, boolean otherSideWasAffected) {
+        getImages().add(image);
+        if (otherSideWasAffected) {
+            return;
+        }
+        image.addProduct(this, true);
+    }
+
+    public void removeAllImages() {
+        getTags().stream().collect(Collectors.toList()).forEach(this::removeTag);
+    }
+
+    public void removeImage(Image image) {
+        removeImage(image, false);
+    }
+
+    public void removeImage(Image image, boolean otherSideWasAffected) {
+        this.getImages().remove(image);
+        if (otherSideWasAffected) {
+            return;
+        }
+        image.removeProduct(this, true);
+    }
+
+    /*------------------------------------------------------------------*/
 
     public List<Tag> getTags() {
         return tags;

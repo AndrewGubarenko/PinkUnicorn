@@ -20,7 +20,7 @@ public class Image {
     private byte[] photo;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
+    @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
     public Long getId() {
@@ -43,7 +43,31 @@ public class Image {
         return product;
     }
 
-    public void setProduct(Product product) {
+    /*public void setProduct(Product product) {
         this.product = product;
+    }*/
+
+    public void addProduct(Product product) {
+        addProduct(product, false);
+    }
+
+    public void addProduct(Product product, boolean otherSideWasAffected) {
+        this.product = product;
+        if (otherSideWasAffected) {
+            return;
+        }
+        product.addImage(this, true);
+    }
+
+    public void removeProduct(Product product) {
+        removeProduct(product, false);
+    }
+
+    public void removeProduct(Product product, boolean otherSideWasAffected) {
+        this.product = null;
+        if (otherSideWasAffected) {
+            return;
+        }
+        product.removeImage(this, true);
     }
 }

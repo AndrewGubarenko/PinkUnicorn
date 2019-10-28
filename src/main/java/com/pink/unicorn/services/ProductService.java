@@ -43,6 +43,7 @@ public class ProductService {
 
         productRepository.save(newProduct);
 
+        imageService.createImage(plainProduct.getImages()).forEach(image -> newProduct.addImage(image));
         tagService.findOrCreate(plainProduct.getTags()).forEach(tag -> newProduct.addTag(tag));
 
         return ProductConverter.ProductToPlain(newProduct);

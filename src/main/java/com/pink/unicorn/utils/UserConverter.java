@@ -4,6 +4,7 @@ import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.domain.User;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,7 +21,7 @@ public class UserConverter {
         if(!(user.getWishList() == null)) {
             result.setWishList(user.getWishList().stream().map(product -> ProductConverter.ProductToPlain(product)).collect(Collectors.toList()));
         } else {
-
+            result.setWishList(new ArrayList<>());
         }
 
         return result;

@@ -47,18 +47,4 @@ public class ProductConverter {
 
         return result;
     }
-
-/*    public static Type switchProductType(Type source, Type destination) {
-        destination.setId(source.getId());
-        destination.setName(source.getName());
-        destination.setCategory(source.getCategory());
-        destination.setBrand(source.getBrand());
-        destination.setDescription(source.getDescription());
-        destination.setInSale(source.isInSale());
-        destination.setPrice(source.getPrice());
-        destination.setSalePrice(source.getSalePrice());
-        destination.setCount(source.getCount());
-
-        return destination;
-    }*/
 }
