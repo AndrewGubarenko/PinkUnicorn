@@ -1,51 +1,54 @@
 package com.pink.unicorn.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Andrii Hubarenko
  * <p>The entity of order. Contains the list of products, user is going to buy, contact and delivery information.</p>
  */
 @Entity
-@Table(name = "ORDERS")
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @ElementCollection(targetClass = Product.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="PRODUCT", joinColumns=@JoinColumn(name="PRODUCT_ID"))
-    @Column(name="LIST_OF_PRODUCTS", nullable = false)
-    private List<Product> listOfProducts;
+    @ElementCollection(targetClass = Long.class)
+    @CollectionTable(name ="list_of_product_ids" , joinColumns=@JoinColumn(name="product_id"))
+    private List<Long> listOfProductIds = new ArrayList<>();
 
-    @Column(name = "DELIVERY_TYPE", nullable = false)
+    @Column(name = "delivery_type", nullable = false)
     private String deliveryType;
 
-    @Column(name = "PAYMENT_TYPE", nullable = false)
+    @Column(name = "payment_type", nullable = false)
     private String paymentType;
 
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "PHONE", nullable = false)
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "EMAIL")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "ADDRESS", nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "IS_COMPLITED", nullable = false)
-    private Boolean isComplited;
+    @Column(name = "is_completed", nullable = false)
+    private Boolean isCompleted;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -55,12 +58,13 @@ public class Order {
         this.id = id;
     }
 
-    public List<Product> getListOfProducts() {
-        return listOfProducts;
+    public List<Long> getListOfProductIds() {
+        return listOfProductIds;
     }
 
-    public void setListOfProducts(List<Product> listOfProducts) {
-        this.listOfProducts = listOfProducts;
+    public void setListOfProductIds(List<Long> listOfProductIds) {
+        this.listOfProductIds.clear();
+        this.listOfProductIds.addAll(listOfProductIds);
     }
 
     public String getDeliveryType() {
@@ -119,41 +123,72 @@ public class Order {
         this.address = address;
     }
 
-    public Boolean getIsComplited() {
-        return isComplited;
+    public Boolean getIsCompleted() {
+        return isCompleted;
     }
 
-    public void setIsComplited(Boolean isComplited) {
-        this.isComplited = isComplited;
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    /*-------------------------------------------------------*/
+
+    public void addUser(User user) {
+        addUser(user, false);
+    }
+
+    void addUser(User user, boolean otherSideWasAffected) {
+        this.user = user;
+        if (otherSideWasAffected) {
+            return;
+        }
+        user.addOrder(this, true);
+    }
+
+    public void removeUser(User user) {
+        removeUser(user, false);
+    }
+
+    void removeUser(User user, boolean otherSideWasAffected) {
+        this.user = null;
+        if (otherSideWasAffected) {
+            return;
+        }
+        user.removeOrder(this, true);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Order)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return id.equals(order.id) &&
-                listOfProducts.equals(order.listOfProducts) &&
+                listOfProductIds.equals(order.listOfProductIds) &&
                 deliveryType.equals(order.deliveryType) &&
                 paymentType.equals(order.paymentType) &&
                 firstName.equals(order.firstName) &&
                 lastName.equals(order.lastName) &&
                 phone.equals(order.phone) &&
-                Objects.equals(email, order.email) &&
+                email.equals(order.email) &&
                 address.equals(order.address) &&
-                isComplited.equals(order.isComplited);
+                isCompleted.equals(order.isCompleted) &&
+                Objects.equals(user, order.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, listOfProducts, deliveryType, paymentType, firstName, lastName, phone, email, address, isComplited);
+        return Objects.hash(id, listOfProductIds, deliveryType, paymentType, firstName, lastName, phone, email, address, isCompleted, user);
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", listOfProducts=" + listOfProducts.stream().map(Product::toString).collect(Collectors.joining(",\'")) +
+                ", listOfProductIds=" + listOfProductIds +
                 ", deliveryType='" + deliveryType + '\'' +
                 ", paymentType='" + paymentType + '\'' +
                 ", firstName='" + firstName + '\'' +
@@ -161,7 +196,8 @@ public class Order {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
-                ", isComplited=" + isComplited +
+                ", isCompleted=" + isCompleted +
+                ", user=" + user +
                 '}';
     }
 }

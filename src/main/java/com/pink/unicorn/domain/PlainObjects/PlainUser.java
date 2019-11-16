@@ -1,12 +1,11 @@
 package com.pink.unicorn.domain.PlainObjects;
 
 import com.pink.unicorn.domain.Role;
-import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component
 public class PlainUser {
 
     private Long id;
@@ -15,6 +14,7 @@ public class PlainUser {
     private String phone;
     private Set<Role> roles;
     private List<PlainProduct> wishList;
+    private List<PlainOrder> orders = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -62,5 +62,13 @@ public class PlainUser {
 
     public void setWishList(List<PlainProduct> wishList) {
         this.wishList = wishList;
+    }
+
+    public List<PlainOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<PlainOrder> orders) {
+        this.orders = orders;
     }
 }

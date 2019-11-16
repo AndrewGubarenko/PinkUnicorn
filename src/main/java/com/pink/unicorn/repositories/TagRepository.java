@@ -4,7 +4,7 @@ import com.pink.unicorn.domain.Tag;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Andrii Hubarenko
@@ -12,5 +12,5 @@ import java.util.List;
  */
 @Repository
 public interface TagRepository extends CrudRepository<Tag, Long> {
-    List<Tag> findByName(String name);
+    Optional<Tag> findByName(String name);
 }

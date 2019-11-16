@@ -15,8 +15,12 @@ import java.util.stream.Collectors;
 @Service
 public class ImageService {
 
+    private final ImageRepository imageRepository;
+
     @Autowired
-    private ImageRepository imageRepository;
+    public ImageService (ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
+    }
 
     @Transactional
     public List<Image> createImage(Collection<PlainImage> plainImages) {

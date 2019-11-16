@@ -1,9 +1,8 @@
 package com.pink.unicorn.controllers;
 
-import com.pink.unicorn.domain.PlainObjects.PlainProduct;
+import com.pink.unicorn.domain.PlainObjects.PlainOrder;
 import com.pink.unicorn.exceptions.EmptyDataException;
-import com.pink.unicorn.services.ProductService;
-import org.apache.log4j.Logger;
+import com.pink.unicorn.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,60 +11,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  *@author Andrii Hubarenko
- * <p>Rest Controller for processing product's requests</p>
+ * <p>Rest Controller for processing order's requests for users</p>
  */
 @RestController
-public class ProductController {
+public class OrderController {
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
-    private final ProductService productService;
+    private final OrderService orderService;
 
     @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public OrderController(OrderService productService) {
+        this.orderService = productService;
     }
 
-    @PostMapping(path = "/admin/product/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainProduct> createProduct(@RequestBody PlainProduct plainProduct){
-        PlainProduct response = productService.createProduct(plainProduct);
+    @PostMapping(path = "/user/{userId}/order/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PlainOrder> createProduct(@RequestBody PlainOrder plainOrder) {
+        PlainOrder response = orderService.createOrder(plainOrder);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(path = "/product/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainProduct> getProduct(@PathVariable Long id) throws EmptyDataException {
-        PlainProduct response = productService.getProduct(id);
+    @GetMapping(path = "/user/{userId}/order/{orderId}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PlainOrder> getProduct(@PathVariable Long orderId) {
+        PlainOrder response = orderService.getOrder(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping(path = "/product/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<PlainProduct>> getProductList() {
-        List<PlainProduct> response = productService.getProductList();
+    @GetMapping(path = "/user/{userId}/order/list", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<PlainOrder>> getProductList(@PathVariable Long userId) {
+        List<PlainOrder> response = orderService.getListOfOrders(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping(path = "/product/filtered_list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Set<PlainProduct>> getProductListByTags(@RequestBody List<String> tags) {
-        Set<PlainProduct> response = productService.getProductListByTags(tags);
+    @PutMapping(path = "/user/{userId}/order/{orderId}/update", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PlainOrder> updateProduct(@RequestBody PlainOrder plainOrder, @PathVariable Long orderId) {
+        PlainOrder response = orderService.updateOrder(plainOrder, orderId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping(path = "/admin/product/update/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainProduct> updateProduct(@RequestBody PlainProduct product, @PathVariable Long id) throws EmptyDataException {
-        PlainProduct response = productService.updateProduct(product, id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @DeleteMapping(path = "/admin/product/delete/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long id) throws EmptyDataException {
-        String response = productService.deleteProduct(id);
+    @DeleteMapping(path = "/user/{userId}/order/{orderId}/delete")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long orderId, @PathVariable Long userId) {
+        String response = orderService.deleteOrder(orderId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -75,19 +69,19 @@ public class ProductController {
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getLocalizedMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": One or more data`s fields are empty.");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingProduct(EmptyResultDataAccessException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such product was found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such order was found");
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingProductId(NoSuchElementException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such product was found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such order was found");
     }
 
     @ExceptionHandler

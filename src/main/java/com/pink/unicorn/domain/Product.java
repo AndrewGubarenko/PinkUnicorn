@@ -44,7 +44,6 @@ public class Product {
     private int count;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column
     private List<Image> images = new ArrayList<>();
 
     @ManyToMany
@@ -203,4 +202,43 @@ public class Product {
         tag.removeProduct(this, true);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id &&
+                inSale == product.inSale &&
+                Double.compare(product.price, price) == 0 &&
+                Double.compare(product.salePrice, salePrice) == 0 &&
+                count == product.count &&
+                name.equals(product.name) &&
+                category.equals(product.category) &&
+                brand.equals(product.brand) &&
+                description.equals(product.description) &&
+                Objects.equals(images, product.images) &&
+                Objects.equals(tags, product.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, category, brand, description, inSale, price, salePrice, count, images, tags);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", description='" + description + '\'' +
+                ", inSale=" + inSale +
+                ", price=" + price +
+                ", salePrice=" + salePrice +
+                ", count=" + count +
+                ", images=" + images +
+                ", tags=" + tags +
+                '}';
+    }
 }

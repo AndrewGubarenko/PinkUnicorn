@@ -11,10 +11,14 @@ import java.util.Base64;
 @Component
 public class ImageConverter {
 
-    @Autowired
-    private static ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public static PlainImage ImageToPlain(Image image) {
+    @Autowired
+    public ImageConverter (ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public PlainImage ImageToPlain(Image image) {
         PlainImage result = new PlainImage();
 
         result.setId(image.getId());
@@ -24,7 +28,7 @@ public class ImageConverter {
         return result;
     }
 
-    public static Image PlainToImage(PlainImage plainImage) {
+/*    public Image PlainToImage(PlainImage plainImage) {
         Image result = new Image();
 
         result.setId(plainImage.getId());
@@ -32,5 +36,5 @@ public class ImageConverter {
         result.addProduct(productRepository.findById(plainImage.getProductId()).get());
 
         return result;
-    }
+    }*/
 }

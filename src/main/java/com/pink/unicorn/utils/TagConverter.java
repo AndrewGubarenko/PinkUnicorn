@@ -11,10 +11,14 @@ import java.util.stream.Collectors;
 @Component
 public class TagConverter {
 
-    @Autowired
-    private static ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public static PlainTag TagToPlain(Tag tag) {
+    @Autowired
+    public TagConverter (ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public PlainTag TagToPlain(Tag tag) {
         PlainTag result = new PlainTag();
 
         result.setId(tag.getId());
@@ -24,7 +28,7 @@ public class TagConverter {
         return result;
     }
 
-    public static Tag PlainToTag(PlainTag plainTag) {
+/*    public Tag PlainToTag(PlainTag plainTag) {
         Tag result = new Tag();
 
         result.setId(plainTag.getId());
@@ -32,5 +36,5 @@ public class TagConverter {
         result.setProductList(plainTag.getPlainProductIdList().stream().map(productId -> productRepository.findById(productId).get()).collect(Collectors.toList()));
 
         return result;
-    }
+    }*/
 }

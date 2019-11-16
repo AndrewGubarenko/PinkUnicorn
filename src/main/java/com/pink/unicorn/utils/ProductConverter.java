@@ -2,6 +2,7 @@ package com.pink.unicorn.utils;
 
 import com.pink.unicorn.domain.PlainObjects.PlainProduct;
 import com.pink.unicorn.domain.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -12,7 +13,17 @@ import java.util.stream.Collectors;
 @Component
 public class ProductConverter {
 
-    public static PlainProduct ProductToPlain(Product product) {
+    private final TagConverter tagConverter;
+    private final ImageConverter imageConverter;
+
+    @Autowired
+    public ProductConverter (TagConverter tagConverter,
+                             ImageConverter imageConverter) {
+        this.tagConverter = tagConverter;
+        this.imageConverter = imageConverter;
+    }
+
+    public PlainProduct ProductToPlain(Product product) {
         PlainProduct result = new PlainProduct();
 
         result.setId(product.getId());
@@ -24,13 +35,13 @@ public class ProductConverter {
         result.setPrice(product.getPrice());
         result.setSalePrice(product.getSalePrice());
         result.setCount(product.getCount());
-        result.setImages(product.getImages().stream().map(image -> ImageConverter.ImageToPlain(image)).collect(Collectors.toSet()));
-        result.setTags(product.getTags().stream().map(tag -> TagConverter.TagToPlain(tag)).collect(Collectors.toSet()));
+        result.setImages(product.getImages().stream().map(image -> imageConverter.ImageToPlain(image)).collect(Collectors.toSet()));
+        result.setTags(product.getTags().stream().map(tag -> tagConverter.TagToPlain(tag)).collect(Collectors.toSet()));
 
         return result;
     }
 
-    public static Product PlainToProduct(PlainProduct plainProduct) {
+/*    public static Product PlainToProduct(PlainProduct plainProduct) {
         Product result = new Product();
 
         result.setId(plainProduct.getId());
@@ -42,9 +53,9 @@ public class ProductConverter {
         result.setPrice(plainProduct.getPrice());
         result.setSalePrice(plainProduct.getSalePrice());
         result.setCount(plainProduct.getCount());
-        result.setImages(plainProduct.getImages().stream().map(plainImage -> ImageConverter.PlainToImage(plainImage)).collect(Collectors.toList()));
-        result.setTags(plainProduct.getTags().stream().map(plainTag -> TagConverter.PlainToTag(plainTag)).collect(Collectors.toSet()));
+        result.setImages(plainProduct.getImages().stream().map(plainImage -> imageConverter.PlainToImage(plainImage)).collect(Collectors.toList()));
+        result.setTags(plainProduct.getTags().stream().map(plainTag -> tagConverter.PlainToTag(plainTag)).collect(Collectors.toSet()));
 
         return result;
-    }
+    }*/
 }

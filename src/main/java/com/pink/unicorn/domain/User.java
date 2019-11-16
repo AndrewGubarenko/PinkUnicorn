@@ -1,8 +1,7 @@
 package com.pink.unicorn.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -13,25 +12,21 @@ import java.util.stream.Collectors;
  * <p>The entity of user. The ordinal user, who can register and uses the privileges of personal account, like wish list, order history etc.</p>
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    @JsonProperty("id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "EMAIL", nullable = false, updatable = false, unique = true)
-    @JsonProperty("email")
+    @Column(name = "email", nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false)
-    @JsonProperty("password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "PHONE")
-    @JsonProperty("phone")
+    @Column(name = "phone")
     private String phone;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -39,11 +34,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @ElementCollection(targetClass = Product.class, fetch = FetchType.EAGER)
-    @CollectionTable(name="PRODUCT", joinColumns=@JoinColumn(name="PRODUCT_ID"))
-    @Column(name="WISH_LIST")
-    @JsonProperty("wishlist")
-    private List<Product> wishList;
+    @ElementCollection(targetClass = Product.class)
+    @CollectionTable(name="wish_list", joinColumns=@JoinColumn(name="product_id"))
+    private List<Long> wishList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -85,30 +81,70 @@ public class User {
         this.roles = roles;
     }
 
-    public List<Product> getWishList() {
+    public List<Long> getWishList() {
         return wishList;
     }
 
-    public void setWishList(List<Product> wishList) {
+    public void setWishList(List<Long> wishList) {
         this.wishList = wishList;
+    }
+
+    /*------------------------------------------------------------------*/
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.removeAllOrders();
+        orders.forEach(this::addOrder);
+    }
+
+    public void addOrder(Order order) {
+        addOrder(order, false);
+    }
+
+    public void addOrder(Order order, boolean otherSideWasAffected) {
+        getOrders().add(order);
+        if (otherSideWasAffected) {
+            return;
+        }
+        order.addUser(this, true);
+    }
+
+    public void removeAllOrders() {
+        getOrders().stream().collect(Collectors.toList()).forEach(this::removeOrder);
+    }
+
+    public void removeOrder(Order order) {
+        removeOrder(order, false);
+    }
+
+    public void removeOrder(Order order, boolean otherSideWasAffected) {
+        this.getOrders().remove(order);
+        if (otherSideWasAffected) {
+            return;
+        }
+        order.removeUser(this, true);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id.equals(user.id) &&
                 email.equals(user.email) &&
                 password.equals(user.password) &&
-                Objects.equals(phone, user.phone) &&
+                phone.equals(user.phone) &&
                 roles.equals(user.roles) &&
-                Objects.equals(wishList, user.wishList);
+                Objects.equals(wishList, user.wishList) &&
+                Objects.equals(orders, user.orders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, phone, roles, wishList);
+        return Objects.hash(id, email, password, phone, roles, wishList, orders);
     }
 
     @Override
@@ -118,8 +154,9 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
-                ", roles=" + roles.stream().map(Role::name).collect(Collectors.joining(",")) +
-                ", wishList=" + wishList.stream().map(Product::toString).collect(Collectors.joining(",\'")) +
+                ", roles=" + roles +
+                ", wishList=" + wishList +
+                ", orders=" + orders +
                 '}';
     }
 }

@@ -53,7 +53,6 @@ public class Tag {
     public void setProductList(List<Product> productList) {
         this.removeAllProducts();
         productList.forEach(this::addProduct);
-        this.productList = productList;
     }
 
     public void addProduct(Product product) {

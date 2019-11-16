@@ -47,13 +47,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainUser> getUser(@PathVariable Long id) {
+    public ResponseEntity<PlainUser> getUser(@PathVariable Long id) throws EmptyDataException {
         PlainUser response = userService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping(path = "/user/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainUser> updateUser(@RequestBody PlainUser plainUser, @PathVariable Long id) {
+    public ResponseEntity<PlainUser> updateUser(@RequestBody PlainUser plainUser, @PathVariable Long id) throws EmptyDataException {
         PlainUser response = userService.update(plainUser, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

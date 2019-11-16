@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,10 +22,10 @@ public class TagService {
     public List<Tag> findOrCreate(Collection<PlainTag> plainTagNames) {
         return plainTagNames.stream().map(plainTagName -> {
 
-            List<Tag> foundTags = tagRepository.findByName(plainTagName.getName());
+            Optional<Tag> foundTag = tagRepository.findByName(plainTagName.getName());
 
-            if (foundTags.size() == 1) {
-                return foundTags.get(0);
+            if (foundTag.isPresent()) {
+                return foundTag.get();
             } else {
                 Tag tag = new Tag(plainTagName.getName());
                 tagRepository.save(tag);

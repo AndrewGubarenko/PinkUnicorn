@@ -27,12 +27,15 @@ public class UserService implements IUserService{
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final UserConverter userConverter;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       ObjectMapper objectMapper) {
+                       ObjectMapper objectMapper,
+                       UserConverter userConverter) {
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
+        this.userConverter = userConverter;
     }
 
     @Override
@@ -48,15 +51,15 @@ public class UserService implements IUserService{
         newUser.setRoles(roles);
         userRepository.save(newUser);
 
-        return UserConverter.UserToPlain(newUser);
+        return userConverter.UserToPlain(newUser);
     }
 
     @Override
     @Transactional
-    public PlainUser update(PlainUser updatedPlaneUser, Long id) {
+    public PlainUser update(PlainUser updatedPlaneUser, Long id) throws EmptyDataException {
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
-            throw new NoSuchElementException();
+            throw new EmptyDataException("No user with id " + id + "exists!" );
         }
         User userForUpdate = userForUpdateOpt.get();
         userForUpdate.setPassword(updatedPlaneUser.getPassword());
@@ -64,18 +67,18 @@ public class UserService implements IUserService{
 
         userRepository.save(userForUpdate);
 
-        return UserConverter.UserToPlain(userForUpdate);
+        return userConverter.UserToPlain(userForUpdate);
     }
 
     @Override
     @Transactional
-    public PlainUser get(Long id) {
+    public PlainUser get(Long id) throws EmptyDataException {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
-            throw new NoSuchElementException();
+            throw new EmptyDataException("No user with id " + id + "exists!" );
         }
         User result = foundUserOpt.get();
-        return UserConverter.UserToPlain(result);
+        return userConverter.UserToPlain(result);
     }
 
     @Override
@@ -93,7 +96,7 @@ public class UserService implements IUserService{
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();
         }
-        return UserConverter.UserToPlain(foundUserOpt.get());
+        return userConverter.UserToPlain(foundUserOpt.get());
     }
 
     @Override

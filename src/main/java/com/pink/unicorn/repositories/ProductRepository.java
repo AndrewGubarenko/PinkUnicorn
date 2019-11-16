@@ -1,8 +1,11 @@
 package com.pink.unicorn.repositories;
 
 import com.pink.unicorn.domain.Product;
+import com.pink.unicorn.domain.Tag;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Andrii Hubarenko
@@ -10,4 +13,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
+    List<Product> findAllByTags(Tag tag);
 }
