@@ -188,7 +188,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", listOfProductIds=" + listOfProductIds +
+                ", listOfProductIds=" + listOfProductIds.stream().map(id -> id.toString()) +
                 ", deliveryType='" + deliveryType + '\'' +
                 ", paymentType='" + paymentType + '\'' +
                 ", firstName='" + firstName + '\'' +

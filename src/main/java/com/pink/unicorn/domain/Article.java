@@ -1,6 +1,9 @@
 package com.pink.unicorn.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -8,25 +11,26 @@ import java.util.Objects;
  * <p>The entity of article.</p>
  */
 @Entity
-@Table(name = "ARTICLES")
+@Table(name = "articles")
 public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "THEME", nullable = false)
+    @Column(name = "theme", nullable = false)
     private String theme;
 
-    @Column(name = "TEXT_OF_ARTICLE", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "text_of_article", columnDefinition = "text", nullable = false)
     private String textOfArticle;
 
-    @Column(name = "SHORT_PREVIEW", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "short_preview", columnDefinition = "text", nullable = false)
     private String shortPreview;
 
-    @Column(name = "PICTURE")
-    private String picture;
+    @Column(name = "photo_base64")
+    @Lob
+    private byte[] picture;
 
     public Long getId() {
         return id;
@@ -60,11 +64,11 @@ public class Article {
         this.shortPreview = shortPreview;
     }
 
-    public String getPicture() {
+    public byte[] getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(byte[] picture) {
         this.picture = picture;
     }
 
@@ -92,7 +96,7 @@ public class Article {
                 ", theme='" + theme + '\'' +
                 ", textOfArticle='" + textOfArticle + '\'' +
                 ", shortPreview='" + shortPreview + '\'' +
-                ", picture='" + picture + '\'' +
+                ", picture='" + Arrays.toString(picture) + '\'' +
                 '}';
     }
 }

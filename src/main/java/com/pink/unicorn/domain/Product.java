@@ -10,45 +10,46 @@ import java.util.stream.Collectors;
  */
 
 @Entity
-@Table(name = "PRODUCTS")
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "CATEGORY", nullable = false)
-    private String category;
-
     //todo: check, should it be to be obligatory
-    @Column(name = "BRAND", nullable = false)
+    @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "IS_IN_SALE", nullable = false)
+    @Column(name = "in_sale", nullable = false)
     private boolean inSale;
 
-    @Column(name = "PRICE")
+    @Column(name = "price")
     private double price;
 
-    @Column(name = "SALE_PRICE")
+    @Column(name = "sale_price")
     private double salePrice;
 
-    @Column(name = "COUNT")
+    @Column(name = "count")
     private int count;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "PRODUCT_TAG", joinColumns = @JoinColumn(name = "PRODUCT_ID"), inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
-    private List<Tag> tags = new ArrayList<>();
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+    @ElementCollection(targetClass = String.class)
+    @CollectionTable(name ="product_sub_categories" , joinColumns=@JoinColumn(name="product_id"))
+    private Set<String> subCategories = new HashSet<>();
 
     public Product() {}
 
@@ -66,14 +67,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getBrand() {
@@ -124,6 +117,15 @@ public class Product {
         this.count = count;
     }
 
+    public Set<String> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(Set<String> subCategories) {
+        this.subCategories.clear();
+        this.subCategories.addAll(subCategories);
+    }
+
     /*------------------------------------------------------------------*/
 
     public List<Image> getImages() {
@@ -148,7 +150,7 @@ public class Product {
     }
 
     public void removeAllImages() {
-        getTags().stream().collect(Collectors.toList()).forEach(this::removeTag);
+        getImages().stream().collect(Collectors.toList()).forEach(this::removeImage);
     }
 
     public void removeImage(Image image) {
@@ -165,41 +167,41 @@ public class Product {
 
     /*------------------------------------------------------------------*/
 
-    public List<Tag> getTags() {
-        return tags;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public void setTags(Collection<Tag> tags) {
-        this.removeAllTags();
-        tags.forEach(this::addTag);
+    public void setCategories(Collection<Category> categories) {
+        this.removeAllCategories();
+        categories.forEach(this::addCategory);
     }
 
-    public void addTag(Tag tag) {
-        addTag(tag, false);
+    public void addCategory(Category category) {
+        addCategory(category, false);
     }
 
-    public void addTag(Tag tag, boolean otherSideWasAffected) {
-        getTags().add(tag);
+    public void addCategory(Category category, boolean otherSideWasAffected) {
+        getCategories().add(category);
         if (otherSideWasAffected) {
             return;
         }
-        tag.addProduct(this, true);
+        category.addProduct(this, true);
     }
 
-    public void removeAllTags() {
-        getTags().stream().collect(Collectors.toList()).forEach(this::removeTag);
+    public void removeAllCategories() {
+        getCategories().stream().collect(Collectors.toList()).forEach(this::removeCategory);
     }
 
-    public void removeTag(Tag tag) {
-        removeTag(tag, false);
+    public void removeCategory(Category category) {
+        removeCategory(category, false);
     }
 
-    public void removeTag(Tag tag, boolean otherSideWasAffected) {
-        this.getTags().remove(tag);
+    public void removeCategory(Category category, boolean otherSideWasAffected) {
+        this.getCategories().remove(category);
         if (otherSideWasAffected) {
             return;
         }
-        tag.removeProduct(this, true);
+        category.removeProduct(this, true);
     }
 
     @Override
@@ -208,37 +210,36 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return id == product.id &&
-                inSale == product.inSale &&
                 Double.compare(product.price, price) == 0 &&
-                Double.compare(product.salePrice, salePrice) == 0 &&
-                count == product.count &&
                 name.equals(product.name) &&
-                category.equals(product.category) &&
                 brand.equals(product.brand) &&
-                description.equals(product.description) &&
-                Objects.equals(images, product.images) &&
-                Objects.equals(tags, product.tags);
+                description.equals(product.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, brand, description, inSale, price, salePrice, count, images, tags);
+        return Objects.hash(id, name, brand, description, price);
     }
 
     @Override
     public String toString() {
+        String subCat = "";
+        Iterator iterator = subCategories.iterator();
+        while (iterator.hasNext()) {
+            subCat += " " + iterator.next();
+        }
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
                 ", brand='" + brand + '\'' +
                 ", description='" + description + '\'' +
-                ", inSale=" + inSale +
-                ", price=" + price +
-                ", salePrice=" + salePrice +
-                ", count=" + count +
-                ", images=" + images +
-                ", tags=" + tags +
+                ", inSale=" + inSale + '\'' +
+                ", price=" + price + '\'' +
+                ", salePrice=" + salePrice + '\'' +
+                ", count=" + count + '\'' +
+                ", images=" + images + '\'' +
+                ", categories=" + categories +
+                ", subCategories=" + "[ " + subCat + " ]" + '\'' +
                 '}';
     }
 }

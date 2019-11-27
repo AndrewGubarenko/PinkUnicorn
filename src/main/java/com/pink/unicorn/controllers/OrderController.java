@@ -2,7 +2,8 @@ package com.pink.unicorn.controllers;
 
 import com.pink.unicorn.domain.PlainObjects.PlainOrder;
 import com.pink.unicorn.exceptions.EmptyDataException;
-import com.pink.unicorn.services.OrderService;
+import com.pink.unicorn.services.interfaces.IOrderService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -10,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
-
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,10 +25,10 @@ import java.util.NoSuchElementException;
 public class OrderController {
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
-    private final OrderService orderService;
+    private final IOrderService orderService;
 
     @Autowired
-    public OrderController(OrderService productService) {
+    public OrderController(IOrderService productService) {
         this.orderService = productService;
     }
 
@@ -39,26 +38,26 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(path = "/user/{userId}/order/{orderId}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PlainOrder> getProduct(@PathVariable Long orderId) {
+    @GetMapping(path = "/user/{userId}/order/{orderId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PlainOrder> getProduct(@PathVariable Long orderId) throws EmptyDataException {
         PlainOrder response = orderService.getOrder(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping(path = "/user/{userId}/order/list", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(path = "/user/{userId}/order/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<PlainOrder>> getProductList(@PathVariable Long userId) {
         List<PlainOrder> response = orderService.getListOfOrders(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping(path = "/user/{userId}/order/{orderId}/update", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PlainOrder> updateProduct(@RequestBody PlainOrder plainOrder, @PathVariable Long orderId) {
+    @PutMapping(path = "/user/{userId}/order/{orderId}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PlainOrder> updateProduct(@RequestBody PlainOrder plainOrder, @PathVariable Long orderId) throws EmptyDataException {
         PlainOrder response = orderService.updateOrder(plainOrder, orderId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping(path = "/user/{userId}/order/{orderId}/delete")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long orderId, @PathVariable Long userId) {
+    public ResponseEntity<String> deleteProduct(@PathVariable Long orderId, @PathVariable Long userId) throws EmptyDataException {
         String response = orderService.deleteOrder(orderId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -69,7 +68,7 @@ public class OrderController {
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": One or more data`s fields are empty.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getLocalizedMessage());
     }
 
     @ExceptionHandler

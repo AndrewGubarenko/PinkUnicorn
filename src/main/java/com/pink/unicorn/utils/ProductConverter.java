@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 @Component
 public class ProductConverter {
 
-    private final TagConverter tagConverter;
+    private final CategoryConverter categoryConverter;
     private final ImageConverter imageConverter;
 
     @Autowired
-    public ProductConverter (TagConverter tagConverter,
+    public ProductConverter (CategoryConverter categoryConverter,
                              ImageConverter imageConverter) {
-        this.tagConverter = tagConverter;
+        this.categoryConverter = categoryConverter;
         this.imageConverter = imageConverter;
     }
 
@@ -28,34 +28,16 @@ public class ProductConverter {
 
         result.setId(product.getId());
         result.setName(product.getName());
-        result.setCategory(product.getCategory());
         result.setBrand(product.getBrand());
         result.setDescription(product.getDescription());
         result.setInSale(product.isInSale());
         result.setPrice(product.getPrice());
         result.setSalePrice(product.getSalePrice());
         result.setCount(product.getCount());
-        result.setImages(product.getImages().stream().map(image -> imageConverter.ImageToPlain(image)).collect(Collectors.toSet()));
-        result.setTags(product.getTags().stream().map(tag -> tagConverter.TagToPlain(tag)).collect(Collectors.toSet()));
+        result.setImages(product.getImages().stream().map(image -> imageConverter.ImageToPlain(image)).collect(Collectors.toList()));
+        result.setCategories(product.getCategories().stream().map(category -> categoryConverter.CategoryToPlain(category)).collect(Collectors.toSet()));
+        result.setSubCategories(product.getSubCategories());
 
         return result;
     }
-
-/*    public static Product PlainToProduct(PlainProduct plainProduct) {
-        Product result = new Product();
-
-        result.setId(plainProduct.getId());
-        result.setName(plainProduct.getName());
-        result.setCategory(plainProduct.getCategory());
-        result.setBrand(plainProduct.getBrand());
-        result.setDescription(plainProduct.getDescription());
-        result.setInSale(plainProduct.isInSale());
-        result.setPrice(plainProduct.getPrice());
-        result.setSalePrice(plainProduct.getSalePrice());
-        result.setCount(plainProduct.getCount());
-        result.setImages(plainProduct.getImages().stream().map(plainImage -> imageConverter.PlainToImage(plainImage)).collect(Collectors.toList()));
-        result.setTags(plainProduct.getTags().stream().map(plainTag -> tagConverter.PlainToTag(plainTag)).collect(Collectors.toSet()));
-
-        return result;
-    }*/
 }

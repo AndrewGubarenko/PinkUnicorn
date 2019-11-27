@@ -3,14 +3,15 @@ package com.pink.unicorn.domain.PlainObjects;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PlainTag {
+public class PlainCategory {
 
     private Long id;
     private String name;
     private Set<Long> plainProductIdList = new HashSet<>();
+    private Set<String> subCategories = new HashSet<>();
 
-    public PlainTag(){}
-    public PlainTag(String name) {
+    public PlainCategory(){}
+    public PlainCategory(String name) {
         this.name = name;
     }
 
@@ -36,5 +37,13 @@ public class PlainTag {
 
     public void setPlainProductIdList(Set<Long> plainProductIdList) {
         this.plainProductIdList = plainProductIdList;
+    }
+
+    public Set<String> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(Set<String> subCategories) {
+        this.subCategories = subCategories;
     }
 }

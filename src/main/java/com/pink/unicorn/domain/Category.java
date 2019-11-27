@@ -1,9 +1,7 @@
 package com.pink.unicorn.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -12,21 +10,25 @@ import java.util.stream.Collectors;
  */
 
 @Entity
-@Table(name = "TAG")
-public class Tag {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "NAME", unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "categories")
     private List<Product> productList = new ArrayList<>();
 
-    public Tag() {}
-    public Tag(String name) {
+    @ElementCollection(targetClass = String.class)
+    @CollectionTable(name ="sub_categories" , joinColumns=@JoinColumn(name="category_id"))
+    private Set<String> subCategories = new HashSet<>();
+
+    public Category() {}
+    public Category(String name) {
         this.name = name;
     }
 
@@ -50,6 +52,15 @@ public class Tag {
         return productList;
     }
 
+    public Set<String> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(Set<String> subCategories) {
+        this.subCategories.clear();
+        this.subCategories.addAll(subCategories);
+    }
+
     public void setProductList(List<Product> productList) {
         this.removeAllProducts();
         productList.forEach(this::addProduct);
@@ -64,7 +75,7 @@ public class Tag {
         if (otherSideWasAffected) {
             return;
         }
-        product.addTag(this, true);
+        product.addCategory(this, true);
     }
 
     public void removeProduct(Product product) {
@@ -76,7 +87,7 @@ public class Tag {
         if (otherSideWasAffected) {
             return;
         }
-        product.removeTag(this, true);
+        product.removeCategory(this, true);
     }
 
     public void removeAllProducts() {
@@ -87,23 +98,34 @@ public class Tag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return id.equals(tag.id) &&
-                name.equals(tag.name) &&
-                Objects.equals(productList, tag.productList);
+        Category category = (Category) o;
+        return id.equals(category.id) &&
+                name.equals(category.name) &&
+                Objects.equals(productList, category.productList) &&
+                Objects.equals(subCategories, category.subCategories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, productList);
+        return Objects.hash(id, name, productList, subCategories);
     }
 
     @Override
     public String toString() {
-        return "Tag{" +
-                "id=" + id +
+        String subCat = "";
+        Iterator iterator = subCategories.iterator();
+        while (iterator.hasNext()) {
+            subCat += " " + iterator.next();
+        }
+        String prodList = "";
+        for(int i = 0; i < productList.size(); i++) {
+            prodList += " " + productList.get(i);
+        }
+        return "Category{" + '\'' +
+                "id=" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", productList=" + productList +
+                ", productList=" + "[ " + prodList + " ]" + '\'' +
+                ", subCategories=" + "[ " + subCat + " ]" + '\'' +
                 '}';
     }
 }

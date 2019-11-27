@@ -2,7 +2,7 @@ package com.pink.unicorn.controllers;
 
 import com.pink.unicorn.domain.PlainObjects.PlainProduct;
 import com.pink.unicorn.exceptions.EmptyDataException;
-import com.pink.unicorn.services.ProductService;
+import com.pink.unicorn.services.interfaces.IProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  *@author Andrii Hubarenko
@@ -26,10 +25,10 @@ import java.util.Set;
 public class ProductController {
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
-    private final ProductService productService;
+    private final IProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(IProductService productService) {
         this.productService = productService;
     }
 
@@ -52,8 +51,8 @@ public class ProductController {
     }
 
     @GetMapping(path = "/product/filtered_list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Set<PlainProduct>> getProductListByTags(@RequestBody List<String> tags) {
-        Set<PlainProduct> response = productService.getProductListByTags(tags);
+    public ResponseEntity<List<PlainProduct>> getProductListByTags(@RequestBody List<String> filters) {
+        List<PlainProduct> response = productService.getFilteredProductList(filters);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -2,7 +2,7 @@ package com.pink.unicorn.controllers;
 
 import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.exceptions.EmptyDataException;
-import com.pink.unicorn.services.UserService;
+import com.pink.unicorn.services.interfaces.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,10 +25,10 @@ import java.util.NoSuchElementException;
 public class UserController {
 
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
-    private final UserService userService;
+    private final IUserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(IUserService userService) {
         this.userService = userService;
     }
 
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/user/{id}/delete")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws EmptyDataException {
         String response = userService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -76,7 +76,7 @@ public class UserController {
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
         LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": One or more data`s fields are empty.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getLocalizedMessage());
     }
 
     @ExceptionHandler

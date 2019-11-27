@@ -34,7 +34,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @ElementCollection(targetClass = Product.class)
+    @ElementCollection(targetClass = Long.class)
     @CollectionTable(name="wish_list", joinColumns=@JoinColumn(name="product_id"))
     private List<Long> wishList = new ArrayList<>();
 
@@ -86,7 +86,8 @@ public class User {
     }
 
     public void setWishList(List<Long> wishList) {
-        this.wishList = wishList;
+        this.wishList.clear();
+        wishList.forEach(this::accept);
     }
 
     /*------------------------------------------------------------------*/
@@ -158,5 +159,9 @@ public class User {
                 ", wishList=" + wishList +
                 ", orders=" + orders +
                 '}';
+    }
+
+    private void accept(Long id) {
+        this.wishList.add(id);
     }
 }

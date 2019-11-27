@@ -1,21 +1,23 @@
 package com.pink.unicorn.domain.PlainObjects;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PlainProduct {
 
     private long id;
     private String name;
-    private String category;
     private String brand;
     private String description;
     private boolean inSale;
     private double price;
     private double salePrice;
     private int count;
-    private Set<PlainImage> images = new HashSet<>();
-    private Set<PlainTag> tags = new HashSet<>();
+    private List<PlainImage> images = new ArrayList<>();
+    private Set<PlainCategory> categories = new HashSet<>();
+    private Set<String> subCategories = new HashSet<>();
 
     public PlainProduct(){}
 
@@ -33,14 +35,6 @@ public class PlainProduct {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getBrand() {
@@ -91,19 +85,28 @@ public class PlainProduct {
         this.count = count;
     }
 
-    public Set<PlainImage> getImages() {
+    public List<PlainImage> getImages() {
         return images;
     }
 
-    public void setImages(Set<PlainImage> images) {
+    public void setImages(List<PlainImage> images) {
         this.images = images;
     }
 
-    public Set<PlainTag> getTags() {
-        return tags;
+    public Set<PlainCategory> getCategories() {
+        return categories;
     }
 
-    public void setTags(Set<PlainTag> tags) {
-        this.tags = tags;
+    public void setCategories(Set<PlainCategory> categories) {
+        this.categories = categories;
+    }
+
+    public Set<String> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(Set<String> subCategories) {
+        this.getSubCategories().clear();
+        this.subCategories.addAll(subCategories);
     }
 }

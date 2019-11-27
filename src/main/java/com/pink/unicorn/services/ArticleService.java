@@ -1,105 +1,107 @@
-/*
 package com.pink.unicorn.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pink.unicorn.domain.Article;
+import com.pink.unicorn.domain.PlainObjects.PlainArticle;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.ArticleRepository;
-import com.pink.unicorn.utils.ProductConverter;
+import com.pink.unicorn.services.interfaces.IArticleService;
+import com.pink.unicorn.utils.ArticleConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class ArticleService implements IArticleService {
 
     private final ArticleRepository articleRepository;
-    private final ObjectMapper objectMapper;
-    private final ProductConverter productConverter;
+    private final ArticleConverter articleConverter;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository,
-                          ObjectMapper objectMapper,
-                          ProductConverter productConverter) {
+                          ArticleConverter articleConverter) {
         this.articleRepository = articleRepository;
-        this.objectMapper = objectMapper;
-        this.productConverter = productConverter;
+        this.articleConverter = articleConverter;
     }
 
     @Override
     @Transactional
-    public String create(String article) throws EmptyDataException, IOException {
-        JsonNode rootNode = objectMapper.readTree(article);
-        if (rootNode.path("theme").asText().equals("")) {
-            throw new EmptyDataException("Empty THEME field");
-        } else if (rootNode.path("shortPreview").asText().equals("")) {
-            throw new EmptyDataException("Empty SHORT PREVIEW field");
-        } else if (rootNode.path("textOfArticle").asText().equals("")) {
-            throw new EmptyDataException("Empty TEXT OF ARTICLE field");
+    public PlainArticle createArticle(PlainArticle plainArticle) throws EmptyDataException {
+        this.checkForEmptyFields(plainArticle);
+
+        Article newArticle = this.setArticleData(plainArticle, new Article());
+        articleRepository.save(newArticle);
+
+        return articleConverter.ArticleToPlain(newArticle);
+    }
+
+    @Override
+    @Transactional
+    public PlainArticle getArticle(Long id) throws EmptyDataException {
+        Optional<Article> articleOpt = articleRepository.findById(id);
+        if(!articleOpt.isPresent()) {
+            throw new EmptyDataException("No Article with id " + id + " exist!");
         }
-
-        return productConverter.ObjectToJSON(saveArticleData(article, new Article()));
+        return articleConverter.ArticleToPlain(articleOpt.get());
     }
 
     @Override
     @Transactional
-    public String get(Long id) {
-        Optional<Article> foundArticleOpt = articleRepository.findById(id);
-        if (!foundArticleOpt.isPresent()) {
-            throw new NoSuchElementException();
-        }
-        Article foundArticle = foundArticleOpt.get();
-        return productConverter.ObjectToJSON(foundArticle);
+    public List<PlainArticle> getListOfArticles() {
+        List<PlainArticle> resultList = new ArrayList<>();
+        articleRepository.findAll().forEach(article -> resultList.add(articleConverter.ArticleToPlain(article)));
+        return  resultList;
     }
 
     @Override
     @Transactional
-    public List<String> getListOfArticles() {
-        Iterable<Article> listOfArticles = articleRepository.findAll();
-        List<String> resultList = new ArrayList<>();
-        listOfArticles.forEach(article -> resultList.add(productConverter.ObjectToJSON(article)));
-        return resultList;
-    }
+    public PlainArticle updateArticle(PlainArticle updatedArticle, Long id) throws EmptyDataException {
+        this.checkForEmptyFields(updatedArticle);
 
-    @Override
-    @Transactional
-    public String update(String updatedArticle, Long id) throws IOException{
         Optional<Article> articleForUpdateOpt = articleRepository.findById(id);
-        if (!articleForUpdateOpt.isPresent()) {
-            throw new NoSuchElementException();
+        if(!articleForUpdateOpt.isPresent()) {
+            throw new EmptyDataException("No Article with id " + id + " exist!");
         }
-        return productConverter.ObjectToJSON(saveArticleData(updatedArticle, articleForUpdateOpt.get()));
+        Article articleForUpdate = this.setArticleData(updatedArticle, articleForUpdateOpt.get());
+        articleRepository.save(articleForUpdate);
+
+        return articleConverter.ArticleToPlain(articleForUpdate);
     }
 
     @Override
     @Transactional
-    public String delete(Long id) {
+    public String deleteArticle(Long id) throws EmptyDataException {
         Optional<Article> articleForDeleteOpt = articleRepository.findById(id);
-        if (!articleForDeleteOpt.isPresent()) {
-            throw new NoSuchElementException();
+        if(!articleForDeleteOpt.isPresent()) {
+            throw new EmptyDataException("No Article with id " + id + " exists");
         }
-        String articleTheme = articleForDeleteOpt.get().getTheme();
+        String theme = articleForDeleteOpt.get().getTheme();
         articleRepository.delete(articleForDeleteOpt.get());
-        return "Article by theme " + articleTheme + " was completely removed";
+        return "Article with theme: \"" + theme + "\" was completely removed";
     }
 
-    private Article saveArticleData(String data, Article article) throws IOException{
-        JsonNode rootNode = objectMapper.readTree(data);
-        article.setTheme(rootNode.path("theme").asText());
-        article.setShortPreview(rootNode.path("shortPreview").asText());
-        article.setTextOfArticle(rootNode.path("textOfArticle").asText());
-        article.setPicture(rootNode.path("picture").asText());
-        articleRepository.save(article);
+    private void checkForEmptyFields (PlainArticle plainArticle) throws EmptyDataException{
+        if(plainArticle.getTheme().equals("") || plainArticle.getTheme() == null) {
+            throw new EmptyDataException("Theme field is empty!");
+        }
+        if(plainArticle.getShortPreview().equals("") || plainArticle.getShortPreview() == null) {
+            throw new EmptyDataException("Short preview field is empty!");
+        }
+        if(plainArticle.getTextOfArticle().equals("") || plainArticle.getTextOfArticle() == null) {
+            throw new EmptyDataException("Text of plainArticle field is empty!");
+        }
+    }
 
-        return article;
+    private Article setArticleData (PlainArticle source, Article target) {
+        target.setTheme(source.getTheme());
+        target.setShortPreview(source.getShortPreview());
+        target.setTextOfArticle(source.getTextOfArticle());
+        target.setPicture(Base64.getDecoder().decode(source.getPicture()));
+        return target;
     }
 
 }
-*/

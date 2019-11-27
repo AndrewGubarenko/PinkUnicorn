@@ -43,26 +43,4 @@ public class OrderConverter {
 
         return result;
     }
-
-/*    public Order PlainToOrder (PlainOrder plainOrder) {
-        Order result = new Order();
-
-        result.setId(plainOrder.getId());
-        result.setEmail(plainOrder.getEmail());
-        result.setFirstName(plainOrder.getFirstName());
-        result.setLastName(plainOrder.getLastName());
-        result.setAddress(plainOrder.getAddress());
-        result.setDeliveryType(plainOrder.getDeliveryType());
-        result.setPhone(plainOrder.getPhone());
-        result.setPaymentType(plainOrder.getPaymentType());
-        result.setIsCompleted(plainOrder.getIsCompleted());
-        result.setListOfProductIds(plainOrder.getListOfProductIds());
-
-        User userForAdd = userRepository.findById(plainOrder.getUserId()).get();
-
-        result.addUser(userForAdd);
-
-        return result;
-    }*/
-
 }

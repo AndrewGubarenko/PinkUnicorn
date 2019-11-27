@@ -46,17 +46,4 @@ public class UserConverter {
         }
         return result;
     }
-
-/*    public User PlainToUser (PlainUser plainUser) {
-        User result = new User();
-
-        result.setId(plainUser.getId());
-        result.setEmail(plainUser.getEmail());
-        result.setPassword(plainUser.getPassword());
-        result.setPhone(plainUser.getPhone());
-        result.setRoles(plainUser.getRoles());
-        result.setWishList(plainUser.getWishList().stream().map(planeProduct -> ProductConverter.PlainToProduct(planeProduct)).collect(Collectors.toList()));
-
-        return result;
-    }*/
 }

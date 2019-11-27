@@ -7,23 +7,22 @@ import com.pink.unicorn.domain.Role;
 import com.pink.unicorn.domain.User;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.UserRepository;
+import com.pink.unicorn.services.interfaces.IUserService;
 import com.pink.unicorn.utils.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Andrii Hubarenko
  * <p>This class implements an interfase IUserService</p>
  */
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
@@ -59,7 +58,7 @@ public class UserService implements IUserService{
     public PlainUser update(PlainUser updatedPlaneUser, Long id) throws EmptyDataException {
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + id + "exists!" );
+            throw new EmptyDataException("No user with id " + id + " exists!" );
         }
         User userForUpdate = userForUpdateOpt.get();
         userForUpdate.setPassword(updatedPlaneUser.getPassword());
@@ -71,11 +70,11 @@ public class UserService implements IUserService{
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public PlainUser get(Long id) throws EmptyDataException {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + id + "exists!" );
+            throw new EmptyDataException("No user with id " + id + " exists!" );
         }
         User result = foundUserOpt.get();
         return userConverter.UserToPlain(result);
@@ -101,14 +100,31 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public String delete(Long id) {
+    public String delete(Long id) throws EmptyDataException {
         Optional<User> userForDeleteOpt = userRepository.findById(id);
         if (!userForDeleteOpt.isPresent()) {
-            throw new NoSuchElementException();
+            throw new EmptyDataException("No user with id " + id + " exists!" );
         }
-        String userEmail = userForDeleteOpt.get().getEmail();
-        userRepository.delete(userForDeleteOpt.get());
+        User userForDelete = userForDeleteOpt.get();
+        userForDelete.removeAllOrders();
+        userForDelete.getWishList().clear();
+        userForDelete.getRoles().clear();
+        String userEmail = userForDelete.getEmail();
+        userRepository.delete(userForDelete);
         return "User with email " + userEmail + " was completely removed";
+    }
+
+    @Override
+    @Transactional
+    public Boolean addProductToWishList (PlainUser plainUser, Long userId) throws EmptyDataException {
+        Optional<User> userForAddWishListOpt = userRepository.findById(userId);
+        if (!userForAddWishListOpt.isPresent()) {
+            throw new EmptyDataException("No user with id " + userId + " exists!" );
+        }
+        List<Long> listOfProductIds = plainUser.getWishList().stream().map(plainProduct -> plainProduct.getId()).collect(Collectors.toList());
+        User userForAddWishList = userForAddWishListOpt.get();
+        userForAddWishList.setWishList(listOfProductIds);
+        return true;
     }
 
 }
