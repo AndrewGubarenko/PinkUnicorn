@@ -1,0 +1,35 @@
+
+body {
+  background-color: #d3a1b9;
+  background-image: url(statics/images/background_poligon.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  color: black;
+  -webkit-text-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+.mainContainer {
+  width: 100%;
+  max-width: 1510px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
