@@ -10,6 +10,7 @@ import com.pink.unicorn.repositories.UserRepository;
 import com.pink.unicorn.services.interfaces.IUserService;
 import com.pink.unicorn.utils.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,17 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final UserConverter userConverter;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        ObjectMapper objectMapper,
-                       UserConverter userConverter) {
+                       UserConverter userConverter,
+                       BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
         this.userConverter = userConverter;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class UserService implements IUserService {
         User newUser = new User();
 
         newUser.setEmail(plainUser.getEmail());
-        newUser.setPassword(plainUser.getPassword());
+        newUser.setPassword(passwordEncoder.encode(plainUser.getPassword()));
         newUser.setPhone(plainUser.getPhone());
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
@@ -61,7 +65,7 @@ public class UserService implements IUserService {
             throw new EmptyDataException("No user with id " + id + " exists!" );
         }
         User userForUpdate = userForUpdateOpt.get();
-        userForUpdate.setPassword(updatedPlaneUser.getPassword());
+        userForUpdate.setPassword(passwordEncoder.encode(updatedPlaneUser.getPassword()));
         userForUpdate.setPhone(updatedPlaneUser.getPhone());
 
         userRepository.save(userForUpdate);
@@ -91,7 +95,7 @@ public class UserService implements IUserService {
         }
         String email = rootNode.path("email").asText().toLowerCase();
         String password = rootNode.path("password").asText();
-        Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(email, password);
+        Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();
         }

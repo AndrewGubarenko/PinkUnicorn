@@ -48,7 +48,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.1.9.RELEASE</version>
+                <version>5.2.5.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -95,19 +95,26 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.1.5.RELEASE</version>
+            <version>5.3.1.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>5.1.2.RELEASE</version>
+            <version>5.3.1.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>4.0.1.RELEASE</version>
+            <version>5.3.1.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.3.1.RELEASE</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -124,10 +131,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.6</version>
-            <scope>runtime</scope>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
         </dependency>
 
         <dependency>
@@ -167,6 +173,7 @@
             <artifactId>flyway-core</artifactId>
             <version>5.2.4</version>
         </dependency>-->
+
     </dependencies>
 
     <build>

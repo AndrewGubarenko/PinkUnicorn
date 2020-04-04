@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration("classpath:test-main.xml")
+@ContextConfiguration("classpath:test_application_context.xml")
 @WebAppConfiguration
 @Transactional
 public class UserControllerExceptionTest {

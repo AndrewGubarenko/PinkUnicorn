@@ -32,13 +32,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path = "/user/registration", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "/registration")
     public ResponseEntity<PlainUser> registration(@RequestBody PlainUser plainUser) {
         PlainUser response = userService.create(plainUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping(path = "/user/authentication")
+    @PostMapping(path = "/authentication")
     public ResponseEntity<PlainUser> authenticate(@RequestBody String authData) throws IOException, EmptyDataException{
         PlainUser respond = userService.findByEmailAndPassword(authData);
 
@@ -46,19 +46,19 @@ public class UserController {
 
     }
 
-    @GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "/users/{id}")
     public ResponseEntity<PlainUser> getUser(@PathVariable Long id) throws EmptyDataException {
         PlainUser response = userService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping(path = "/user/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(path = "/users/{id}")
     public ResponseEntity<PlainUser> updateUser(@RequestBody PlainUser plainUser, @PathVariable Long id) throws EmptyDataException {
         PlainUser response = userService.update(plainUser, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping(path = "/user/{id}/delete")
+    @DeleteMapping(path = "/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) throws EmptyDataException {
         String response = userService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
