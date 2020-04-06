@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400&display=swap');
 body {
   background-color: #d3a1b9;
   background-image: url(statics/images/background_poligon.svg);
@@ -11,6 +11,8 @@ body {
   font-size: 16px;
   color: black;
   -webkit-text-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
 }
 
 *,
@@ -21,6 +23,12 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 p {

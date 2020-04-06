@@ -1,12 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400&display=swap');
 
 .header {
   width: 100%;
-  position: absolute;
   top: 0;
   left: 0;
   padding: 35px 60px;
-  z-index: 1000;
+  z-index: 100;
+  flex-grow: 1 0 auto;
 }
 
 .header__inner {
@@ -39,9 +38,38 @@
 .header__categories {
   font-size: 18px;
   text-transform: uppercase;
+  width: 100%;
+}
+
+.header__menu {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  width: 100%;
+}
+
+.header__menu__list {
+  position: relative;
+  border-bottom: 40px solid transparent;
+}
+
+.header__menu__drop {
+  position: absolute;
+  width: 300px;
+  top: -9999em;
+  left: 10px;
+  opacity: 0;
+  transition: opacity .2s linear;
+}
+
+.header__menu__list:last-child .header__menu__drop {
+  left: -400%;
+  text-align: right;
+  overflow: visible;
+}
+
+.header__menu__list:hover .header__menu__drop {
+  top: 40px;
+  opacity: 1;
 }
 
 .nav__link {
@@ -58,4 +86,10 @@
 .nav__link:hover {
   color: #DA5380;
   text-decoration: none;
+}
+
+.nav__subcat {
+  text-transform: capitalize;
+  line-height: 2;
+  color: #b5003c;
 }

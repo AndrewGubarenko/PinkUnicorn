@@ -1,0 +1,153 @@
+.footer {
+  width: 100%;
+  flex-grow: 0 0 auto;
+  display: flex;
+  min-height: 260px;
+}
+
+.footer__about {
+  display: flex;
+  min-height: 260px;
+  width: 33.33333%;
+}
+.footer__about__half {
+  padding: 0 15px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__about__link {
+  text-decoration: none;
+  line-height: 1.5;
+  color:#000;
+  margin-bottom: 60px;
+  transition: color .1s linear;
+}
+
+.footer__about__link:hover {
+  text-decoration: none;
+  color:#DA5380;
+}
+
+.footer__social {
+  margin: 0 0 30px 0;
+  padding: 0 15px;
+  width: 33.33333%;
+}
+
+.footer__social__header {
+
+}
+
+.footer__social__icons {
+  padding: 50px 0 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__social__single__icon {
+  margin-right: 50px;
+  width: 50px;
+  height: 50px;
+  transition: fill .1s linear;
+}
+
+.footer__social__single__icon:hover {
+  fill: #DA5380;
+}
+
+.footer__eighteen_prohibited {
+  margin-top: 32px;
+  line-height: 1.5;
+}
+
+.footer__licences {
+  padding: 0 15px;
+  width: 33.33333%;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__eighteen__rule {
+  display: flex;
+  align-items: center;
+  color:#b5003c;
+}
+
+.footer__eighteen__icon {
+  height: 30px;
+  width: 30px;
+  fill:#b5003c;
+  margin-right: 5px;
+}
+
+.ref__to__icon__designer__container {
+  margin-top: 13px;
+  width: 130px;
+}
+
+.footer__single__author {
+
+}
+
+.ref__to__icon__designer {
+  text-decoration: none;
+  line-height: 22px;
+  color:#000;
+  line-height: 2;
+  transition: color .1s linear;
+}
+
+.ref__to__icon__designer:hover {
+  text-decoration: none;
+  color:#DA5380;
+}
+
+.ref__to__icon__designer__prefix {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-right: 30px;
+  transition: all .1s linear;
+}
+
+.ref__to__icon__designer__prefix:hover {
+  color: #DA5380;
+}
+
+.ref__icon_author__list {
+  position: relative;
+}
+
+.ref__icon_author__list::after {
+  content: "";
+  position: absolute;
+  border: 5px solid;
+  border-color: transparent transparent transparent #000;
+  top: 10px;
+  right: 10px;
+  transition: .1s linear;
+}
+
+.ref__icon_author__list:hover::after {
+  border-color: transparent transparent transparent #DA5380;
+  transform: scaleX(-1);
+}
+
+.ref__icon_author__drop {
+  position: absolute;
+  width: 200%;
+  left: 130px;
+  top: -9999em;
+  opacity: 0;
+  transition: opacity .1s linear;
+}
+
+.ref__icon_author__list:hover .ref__icon_author__drop{
+  opacity: 1;
+  top: 0;
+}
+
+.copyright {
+  color:#b5003c;
+}
