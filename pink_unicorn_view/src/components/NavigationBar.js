@@ -71,112 +71,213 @@ class NavigationBar extends React.Component {
                 <svg className="icon">
                   <use xlinkHref="#heart"/>
                 </svg>
-                <svg className="icon" style={{visibility:"hidden", position:"absolute"}}>
+                <svg id="auth__user__icon" className="icon">
                   <use xlinkHref="#user"/>
                 </svg>
-                <svg className="icon">
+                <svg id="unauth__user__icon" className="icon">
                   <use xlinkHref="#enter"/>
                 </svg>
-                <svg className="icon">
+                <svg className="icon" onClick={this.props.onClickSearch}>
                   <use xlinkHref="#search"/>
                 </svg>
+                <input id={this.props.searchId} className="search" name="search" type="text" placeholder="поиск" onChange={this.props.onChangeFieldData} value={this.props.fieldData}/>
             </div>
 
             {/*{CATEGORIES}*/}
-            <nav className="header__categories">
+            <nav id="header__categories__full" className="header__categories">
               <ul className="header__menu">
-                <li className="header__menu__list"><Link className="nav__link" href="#">Белье & аксессуары</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Белье & аксессуары</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Акции</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Акции</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Хиты</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Хиты</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Для него</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Для него</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Для нее</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Для нее</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Для двих</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Для двих</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Лубриканты & Better sex</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Лубриканты & Better sex</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Здоровье</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Здоровье</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Статьи</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Статьи</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
-                <li className="header__menu__list"><Link className="nav__link" href="#">Бренды</Link>
+                <li className="header__menu__list"><Link className="nav__link" to="#">Бренды</Link>
                   <ul className="header__menu__drop">
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 1</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 2</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 3</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 4</Link></li>
-                    <li><Link className="nav__link nav__subcat" href="#">Subcategory 5</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                    <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
                   </ul>
                 </li>
               </ul>
             </nav>
+
+            {/*burger*/}
+            <div className="burger">
+              <span className="burger__item"  onClick={this.props.onClickBurger}>menu</span>
+                <nav id="header__categories__small" className="header__categories" style={{display: this.props.headerCategoriesSmallDisplay}}>
+                  <ul className="header__menu">
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Белье & аксессуары</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Акции</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Хиты</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Для него</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Для нее</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Для двих</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Лубриканты & Better sex</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Здоровье</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Статьи</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                    <li className="header__menu__list"><Link className="nav__link" to="#">Бренды</Link>
+                      <ul className="header__menu__drop">
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 1</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 2</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 3</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 4</Link></li>
+                        <li><Link className="nav__link nav__subcat" to="#">Subcategory 5</Link></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </nav>
+            </div>
+
           </div>
         </div>
       </header>

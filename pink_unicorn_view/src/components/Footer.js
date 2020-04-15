@@ -97,30 +97,44 @@ class Footer extends React.Component {
           </symbol>
         </svg>
 
-        <div className="footer__about">
+        <div id="footer__about__wide" className="footer__about">
           <div className="footer__about__half">
-            <Link className="footer__about__link">О нас</Link>
-            <Link className="footer__about__link">Контакты</Link>
-            <Link className="footer__about__link">Ообратная связь</Link>
+            <Link className="footer__about__link" to="#">О нас</Link>
+            <Link className="footer__about__link" to="#">Контакты</Link>
+            <Link className="footer__about__link" to="#">Ообратная связь</Link>
           </div>
           <div className="footer__about__half">
-            <Link className="footer__about__link">Оплата и доставка</Link>
-            <Link className="footer__about__link">Пользовательское соглашение</Link>
-            <Link className="footer__about__link">Политика конфиденциальности</Link>
+            <Link className="footer__about__link" to="#">Оплата и доставка</Link>
+            <Link className="footer__about__link" to="#">Пользовательское соглашение</Link>
+            <Link className="footer__about__link" to="#">Политика конфиденциальности</Link>
           </div>
+        </div>
+        <div id="footer__about__narrow" className="footer__about">
+          <Link className="footer__about__link" to="#">О нас</Link>
+          <Link className="footer__about__link" to="#">Контакты</Link>
+          <Link className="footer__about__link" to="#">Ообратная связь</Link>
+          <Link className="footer__about__link" to="#">Оплата и доставка</Link>
+          <Link className="footer__about__link" to="#">Пользовательское соглашение</Link>
+          <Link className="footer__about__link" to="#">Политика конфиденциальности</Link>
         </div>
         <div className="footer__social">
           <div className="footer__social__header">Мы в соцсетях:</div>
           <div className="footer__social__icons">
-            <svg className="footer__social__single__icon">
-              <use xlinkHref="#instagram"/>
-            </svg>
-            <svg className="footer__social__single__icon">
-              <use xlinkHref="#viber"/>
-            </svg>
-            <svg className="footer__social__single__icon">
-              <use xlinkHref="#telegram"/>
-            </svg>
+            <a href="https://www.instagram.com/pink_unicorn_store/?igshid=1hkfsow4fkm7k" target="blanc">
+              <svg className="footer__social__single__icon">
+                <use xlinkHref="#instagram"/>
+              </svg>
+            </a>
+            <a href="viber://chat?number=380934228227" target="blanc">
+              <svg className="footer__social__single__icon">
+                <use xlinkHref="#viber"/>
+              </svg>
+            </a>
+            <a href="https://telegram.me/OlenaPolinovskaUKOO" target="blanc">
+              <svg className="footer__social__single__icon">
+                <use xlinkHref="#telegram"/>
+              </svg>
+            </a>
           </div>
           <div className="footer__eighteen_prohibited">
             <div className="footer__eighteen__rule">
@@ -133,7 +147,7 @@ class Footer extends React.Component {
         <div className="footer__licences">
           <div className="copyright" >Copyright © 2020 All rights reserved</div>
           <div className="ref__to__icon__designer__container">
-            <ul classNmae="ref__icon_author__menu">
+            <ul className="ref__icon_author__menu">
               <li className="ref__icon_author__list"><div className="ref__to__icon__designer__prefix">Icons made by:</div>
                 <ul className="ref__icon_author__drop">
                   <li><div className="footer__single__author"><a className="ref__to__icon__designer" href="https://www.flaticon.com/authors/freepik" title="Freepik" target="blank">Freepik</a> from <a className="ref__to__icon__designer" href="https://www.flaticon.com/" title="Flaticon" target="blank">www.flaticon.com</a></div></li>

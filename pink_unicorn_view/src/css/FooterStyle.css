@@ -87,10 +87,6 @@
   width: 130px;
 }
 
-.footer__single__author {
-
-}
-
 .ref__to__icon__designer {
   text-decoration: none;
   line-height: 22px;
@@ -150,4 +146,137 @@
 
 .copyright {
   color:#b5003c;
+}
+
+#footer__about__narrow {
+  display: none;
+}
+/* media
+============================*/
+
+@media (max-width: 1200px) {
+  .footer {
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer__licences {
+    padding: 0
+  }
+
+  .ref__icon_author__drop {
+    left: 0;
+  }
+
+  .ref__icon_author__list:hover .ref__icon_author__drop{
+    opacity: 1;
+    top: 30px;
+  }
+
+  .ref__icon_author__list::after {
+    content: "";
+    position: absolute;
+    border: 5px solid;
+    border-color: #000 transparent transparent transparent;
+    top: 15px;
+    right: 10px;
+    transition: .1s linear;
+  }
+
+  .ref__icon_author__list:hover::after {
+    border-color: #DA5380 transparent transparent transparent;
+    transform: scaleX(-1);
+  }
+}
+
+@media (max-width: 1099px) {
+  #footer__about__wide {
+    display: none;
+  }
+
+  #footer__about__narrow {
+    display: block;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__about__link {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 899px) {
+  .footer__social {
+    text-align: center;
+  }
+
+  .footer__social__icons {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer__social__single__icon {
+    margin: 5px;
+  }
+}
+
+@media (max-width: 749px) {
+
+}
+
+@media (max-width: 549px) {
+  .footer {
+    display: inline-block;
+  }
+  .footer__about {
+    padding-left: 20px;
+    width: 100%;
+  }
+
+  .footer__social {
+    align-items: ;
+    width: 100%;
+  }
+  .footer__social__icons {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .footer__licences {
+    padding-left: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 374px) {
+  .footer {
+    display: flex;
+    flex-direction: column;
+  }
+  .footer__about {
+    width: 100%;
+  }
+
+  .footer__social {
+    width: 100%;
+  }
+
+  .footer__licences {
+    width: 100%;
+    text-align: left;
+  }
+  .ref__icon_author__drop {
+    padding-left: 30px;
+  }
+  .footer__social__icons {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 309px) {
+ .ref__icon_author__drop {
+   padding-left: 0;
+ }
 }

@@ -41,3 +41,28 @@ p {
   margin: 0 auto;
   padding: 0 15px;
 }
+
+/* media
+============================*/
+
+@media (max-width: 1099px) {
+
+}
+
+@media (max-width: 899px) {
+
+}
+
+@media (max-width: 749px) {
+
+}
+
+@media (max-width: 549px) {
+
+}
+
+@media (max-width: 374px) {
+  .mainContainer {
+    padding: 20px;
+  }
+}
