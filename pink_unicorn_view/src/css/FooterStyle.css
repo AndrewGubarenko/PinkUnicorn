@@ -132,6 +132,8 @@
 
 .ref__icon_author__drop {
   position: absolute;
+  display: flex;
+  flex-wrap: wrap;
   width: 200%;
   left: 130px;
   top: -9999em;
@@ -223,7 +225,9 @@
 }
 
 @media (max-width: 749px) {
-
+  .ref__icon_author__drop {
+    width: 140%;
+  }
 }
 
 @media (max-width: 549px) {

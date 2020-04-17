@@ -17,6 +17,7 @@ import delivery from "./../statics/images/main_page/delivery.png";
 import returning from "./../statics/images/main_page/return.png";
 import send from "./../statics/images/main_page/send.png";
 import {Link} from 'react-router-dom';
+import Carousel from 'react-elastic-carousel';
 
 class MainPage extends React.Component {
 
@@ -29,10 +30,10 @@ class MainPage extends React.Component {
             <path d="M360,0v360C161.2,360,0,198.8,0,0H360z"/>
           </symbol>
           <symbol id="scroll_left" viewBox="0 0 50 50">
-            <polyline class="st0" points="34.7,5.4 15.2,25 34.8,44.6 "/>
+            <polyline points="34.7,5.4 15.2,25 34.8,44.6 "/>
           </symbol>
           <symbol id="scroll_right" viewBox="0 0 50 50">
-            <polyline class="st0" points="15.3,5.4 34.8,25 15.2,44.6 "/>
+            <polyline points="15.3,5.4 34.8,25 15.2,44.6 "/>
           </symbol>
         </svg>
         {/*INTRO*/}
@@ -46,7 +47,7 @@ class MainPage extends React.Component {
                 <h1 className="intro__title__header1">Just be</h1>
                 <h1 className="intro__title__header1">a</h1>
                 <h1 className="intro__title__header1">unicorn</h1>
-                <Link className="button button--rose" href="#">подробнее</Link>
+                <Link className="button button--rose" to="#">подробнее</Link>
               </div>
             </div>
           </div>
@@ -59,19 +60,19 @@ class MainPage extends React.Component {
             <div className="single_cat">
               <img className="single_cat_image" src={FOR_HER} alt=""/>
               <h4 className="single_cat_name">для нее</h4>
-              <Link className="single_cat_content">для нее</Link>
+              <Link className="single_cat_content" to="#">для нее</Link>
             </div>
 
             <div className="single_cat">
               <img className="single_cat_image" src={FOR_HIM} alt=""/>
               <h4 className="single_cat_name">для него</h4>
-              <Link className="single_cat_content">для него</Link>
+              <Link className="single_cat_content" to="#">для него</Link>
             </div>
 
             <div className="single_cat">
               <img className="single_cat_image" src={FOR_BOTH} alt=""/>
               <h4 className="single_cat_name">для двоих</h4>
-              <Link className="single_cat_content">для двоих</Link>
+              <Link className="single_cat_content" to="#">для двоих</Link>
             </div>
 
           </div>
@@ -91,29 +92,46 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_left" />
-              </svg>
-              <div className="product__item">
-                <img className="product__image" src={product1} alt="" />
-                <div className="product__name">Маструбатор Svacom</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
+              <Carousel ref={ref => (this.carousel1 = ref)}
+                        breakPoints={this.props.breakPoints}
+                        renderArrow={this.props.myArrow}
+                        pagination={false}
+                        onNextStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel1.goTo(0)
+                                        }
+                                      }
+                                    }
+                        onPrevStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel1.goTo(10)
+                                        }
+                                      }
+                                    }>
+                <div className="product__item">
+                  <img className="product__image" src={product1} alt="" />
+                  <div className="product__name">Маструбатор Svacom</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
 
-              <div className="product__item">
-                <img className="product__image" src={product2} alt="" />
-                <div className="product__name">Лубрикант на водной основе JO</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
+                <div className="product__item">
+                  <img className="product__image" src={product2} alt="" />
+                  <div className="product__name">Лубрикант на водной основе JO</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
 
-              <div className="product__item">
-                <img className="product__image" src={product3} alt="" />
-                <div className="product__name">Маструбатор Blow You</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_right" />
-              </svg>
+                <div className="product__item">
+                  <img className="product__image" src={product3} alt="" />
+                  <div className="product__name">Маструбатор Blow You</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+
+                <div className="product__item">
+                  <img className="product__image" src={product3} alt="" />
+                  <div className="product__name">Маструбатор Blow You</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+              </Carousel>
             </div>
 
           </div>
@@ -129,47 +147,82 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_left" />
-              </svg>
-              <div className="product__item">
-                <div>
-                  <div className="sale__sprite__number">-5%</div>
-                  <svg className="sale__sprite">
-                    <use xlinkHref="#sale" />
-                  </svg>
+              <Carousel ref={ref => (this.carousel2 = ref)}
+                        breakPoints={this.props.breakPoints}
+                        renderArrow={this.props.myArrow}
+                        pagination={false}
+                        onNextStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel2.goTo(0)
+                                        }
+                                      }
+                                    }
+                        onPrevStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel2.goTo(10)
+                                        }
+                                      }
+                                    }>
+                <div className="product__item">
+                  <div>
+                    <div className="sale__sprite__number">-5%</div>
+                    <svg className="sale__sprite">
+                      <use xlinkHref="#sale" />
+                    </svg>
+                  </div>
+                  <img className="product__image" src={product1} alt="" />
+                  <div className="product__name">Маструбатор Svacom</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
                 </div>
-                <img className="product__image" src={product1} alt="" />
-                <div className="product__name">Маструбатор Svacom</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
 
-              <div className="product__item">
-                <div>
-                  <div className="sale__sprite__number">-15%</div>
-                  <svg className="sale__sprite">
-                    <use xlinkHref="#sale" />
-                  </svg>
+                <div className="product__item">
+                  <div>
+                    <div className="sale__sprite__number">-15%</div>
+                    <svg className="sale__sprite">
+                      <use xlinkHref="#sale" />
+                    </svg>
+                  </div>
+                  <img className="product__image" src={product2} alt="" />
+                  <div className="product__name">Лубрикант на водной основе JO</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
                 </div>
-                <img className="product__image" src={product2} alt="" />
-                <div className="product__name">Лубрикант на водной основе JO</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
 
-              <div className="product__item">
-                <div>
-                  <div className="sale__sprite__number">-5%</div>
-                  <svg className="sale__sprite">
-                    <use xlinkHref="#sale" />
-                  </svg>
+                <div className="product__item">
+                  <div>
+                    <div className="sale__sprite__number">-5%</div>
+                    <svg className="sale__sprite">
+                      <use xlinkHref="#sale" />
+                    </svg>
+                  </div>
+                  <img className="product__image" src={product3} alt="" />
+                  <div className="product__name">Маструбатор Blow You</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
                 </div>
-                <img className="product__image" src={product3} alt="" />
-                <div className="product__name">Маструбатор Blow You</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_right" />
-              </svg>
+
+                <div className="product__item">
+                  <div>
+                    <div className="sale__sprite__number">-5%</div>
+                    <svg className="sale__sprite">
+                      <use xlinkHref="#sale" />
+                    </svg>
+                  </div>
+                  <img className="product__image" src={product3} alt="" />
+                  <div className="product__name">Маструбатор Blow You</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+
+                <div className="product__item">
+                  <div>
+                    <div className="sale__sprite__number">-5%</div>
+                    <svg className="sale__sprite">
+                      <use xlinkHref="#sale" />
+                    </svg>
+                  </div>
+                  <img className="product__image" src={product3} alt="" />
+                  <div className="product__name">Маструбатор Blow You</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+              </Carousel>
             </div>
           </div>
 
@@ -184,29 +237,46 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_left" />
-              </svg>
-              <div className="product__item">
-                <img className="product__image" src={article1} alt="" />
-                <div className="product__name">Страсть или ...?</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
+              <Carousel ref={ref => (this.carousel3 = ref)}
+                        breakPoints={this.props.breakPoints}
+                        renderArrow={this.props.myArrow}
+                        pagination={false}
+                        onNextStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel3.goTo(0)
+                                        }
+                                      }
+                                    }
+                        onPrevStart={(currentItem, nextItem) => {
+                                        if(currentItem.index === nextItem.index ){
+                                          this.carousel3.goTo(10)
+                                        }
+                                      }
+                                    }>
+                <div className="product__item">
+                  <img className="product__image" src={article1} alt="" />
+                  <div className="product__name">Страсть или ...?</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
 
-              <div className="product__item">
-                <img className="product__image" src={article2} alt="" />
-                <div className="product__name">Оральные ласки</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
+                <div className="product__item">
+                  <img className="product__image" src={article2} alt="" />
+                  <div className="product__name">Оральные ласки</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
 
-              <div className="product__item">
-                <img className="product__image" src={article3} alt="" />
-                <div className="product__name">Как выбрать лубрикант?</div>
-                <Link className="button button--rose product__button" href="#">купить</Link>
-              </div>
-              <svg className="scroll__button">
-                <use xlinkHref="#scroll_right" />
-              </svg>
+                <div className="product__item">
+                  <img className="product__image" src={article3} alt="" />
+                  <div className="product__name">Как выбрать лубрикант?</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+
+                <div className="product__item">
+                  <img className="product__image" src={article2} alt="" />
+                  <div className="product__name">Оральные ласки</div>
+                  <Link className="button button--rose product__button" to="#">купить</Link>
+                </div>
+              </Carousel>
             </div>
           </div>
 

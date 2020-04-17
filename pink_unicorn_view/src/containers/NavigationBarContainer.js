@@ -1,5 +1,9 @@
 import React from 'react';
-import NavigationBar from './../components/NavigationBar'
+import NavigationBar from './../components/NavigationBar';
+import {createStore} from 'redux';
+import allReducers from './../reducers/allReducers.js'
+
+const store = createStore(allReducers);
 
 class NavigationBarContainer extends React.Component {
   constructor(props) {
@@ -36,6 +40,7 @@ class NavigationBarContainer extends React.Component {
       <NavigationBar
         searchId={this.state.searchId}
         headerCategoriesSmallDisplay={this.state.headerCategoriesSmallDisplay}
+        headerDropMargin={this.state.headerDropMargin}
         onChangeFieldData={this.onChangeFieldData}
         onClickSearch={this.onClickSearch}
         onClickBurger={this.onClickBurger}
