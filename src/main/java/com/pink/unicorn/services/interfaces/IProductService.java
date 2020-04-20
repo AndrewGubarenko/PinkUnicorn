@@ -1,6 +1,7 @@
 package com.pink.unicorn.services.interfaces;
 
 import com.pink.unicorn.domain.PlainObjects.PlainProduct;
+import com.pink.unicorn.domain.Product;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,35 +16,32 @@ public interface IProductService {
 
     /**
      * <p>Method for creating product.</p>
-     * @param plainProduct
+     * @param product
      * @return PlainProduct
      */
     @Transactional
-    PlainProduct createProduct(PlainProduct plainProduct);
+    PlainProduct createProduct(Product product);
 
     /**
      * <p>Method for updating product.</p>
-     * @param updatedPlainProduct
+     * @param updatedProduct
      * @param productId
      * @return PlainProduct
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainProduct updateProduct(PlainProduct updatedPlainProduct, Long productId) throws EmptyDataException;
+    PlainProduct updateProduct(Product updatedProduct, Long productId);
 
     /**
      * <p>Method for getting product.</p>
      * @param productId
      * @return PlainProduct
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainProduct getProduct(Long productId) throws EmptyDataException;
+    PlainProduct getProduct(Long productId);
 
     /**
      * <p>Method for getting list of products.</p>
-     * @return PlainProduct
-     * @throws EmptyDataException
+     * @return List<PlainProduct>
      */
     @Transactional
     List<PlainProduct> getProductList();
@@ -51,7 +49,7 @@ public interface IProductService {
     /**
      * <p>Method for getting list of products filtered by tag.</p>
      * @param filters
-     * @return PlainProduct
+     * @return List<PlainProduct>
      */
     @Transactional
     List<PlainProduct> getFilteredProductList(List<String> filters);
@@ -60,8 +58,7 @@ public interface IProductService {
      * <p>Method for deleting product.</p>
      * @param id
      * @return String
-     * @throws EmptyDataException
      */
     @Transactional
-    String deleteProduct(Long id) throws EmptyDataException;
+    String deleteProduct(Long id);
 }

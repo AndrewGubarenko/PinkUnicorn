@@ -40,15 +40,15 @@ public class Product {
     @Column(name = "count")
     private int count;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Image> images = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
-    @ElementCollection(targetClass = String.class)
-    @CollectionTable(name ="product_sub_categories" , joinColumns=@JoinColumn(name="product_id"))
+    @ElementCollection
+    @CollectionTable(name="sub_cats")
     private Set<String> subCategories = new HashSet<>();
 
     public Product() {}
@@ -123,7 +123,7 @@ public class Product {
 
     public void setSubCategories(Set<String> subCategories) {
         this.subCategories.clear();
-        this.subCategories.addAll(subCategories);
+        subCategories.forEach(subCat -> this.subCategories.add(subCat));
     }
 
     /*------------------------------------------------------------------*/
@@ -223,11 +223,6 @@ public class Product {
 
     @Override
     public String toString() {
-        String subCat = "";
-        Iterator iterator = subCategories.iterator();
-        while (iterator.hasNext()) {
-            subCat += " " + iterator.next();
-        }
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -239,7 +234,6 @@ public class Product {
                 ", count=" + count + '\'' +
                 ", images=" + images + '\'' +
                 ", categories=" + categories +
-                ", subCategories=" + "[ " + subCat + " ]" + '\'' +
                 '}';
     }
 }

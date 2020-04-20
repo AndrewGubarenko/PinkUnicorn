@@ -2,6 +2,7 @@ package com.pink.unicorn.services.interfaces;
 
 import com.pink.unicorn.domain.Category;
 import com.pink.unicorn.domain.PlainObjects.PlainCategory;
+import com.pink.unicorn.domain.Product;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,18 +17,18 @@ import java.util.Set;
 public interface ICategoryService {
     /**
      * <p>Method for creating Category if it is not exist in DB.</p>
-     * @param plainCategory
-     * @param subCategories
+     * @param category
+     * @param product
      * @return List<Category>
      */
     @Transactional
-    List<Category> findOrCreate(Collection<PlainCategory> plainCategory, Set<String> subCategories);
+    List<Category> findOrCreate(Collection<Category> category, Product product);
 
     /**
      * <p>Method for deleting Category.</p>
      * @param categoryName
-     * @return List<Category>
+     * @return void
      */
     @Transactional
-    void removeCategory(String categoryName) throws EmptyDataException;
+    void removeCategory(String categoryName);
 }

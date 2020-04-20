@@ -1,6 +1,8 @@
 package com.pink.unicorn.services.interfaces;
 
+import com.pink.unicorn.domain.PlainObjects.AuthData;
 import com.pink.unicorn.domain.PlainObjects.PlainUser;
+import com.pink.unicorn.domain.User;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,23 +20,21 @@ public interface IUserService {
      * @return PlainUser
      */
     @Transactional
-    PlainUser create(PlainUser user);
+    PlainUser create(User user);
 
     /**
      * <p>Method for updating user's data</p>
      * @param user
      * @param id
      * @return PlainUser
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainUser update(PlainUser user, Long id) throws EmptyDataException;
+    PlainUser update(User user, Long id);
 
     /**
      * <p>Method for getting user</p>
      * @param id
      * @return PlainUser
-     * @throws EmptyDataException
      */
     @Transactional
     PlainUser get(Long id) throws EmptyDataException;
@@ -43,27 +43,23 @@ public interface IUserService {
      * <p>Method uses for searching of user by registration parameters, usually for authentication</p>
      * @param authData
      * @return PlainUser
-     * @throws IOException
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainUser findByEmailAndPassword(String authData) throws IOException, EmptyDataException;
+    PlainUser findByEmailAndPassword(AuthData authData);
 
     /**
      * <p>Method for deleting user</p>
      * @param id
      * @return String
-     * @throws EmptyDataException
      */
     @Transactional
     String delete(Long id) throws EmptyDataException;
 
     /**
      * <p>Method for adding product to wish list</p>
-     * @param plainUser
+     * @param user
      * @return Boolean
-     * @throws EmptyDataException
      */
     @Transactional
-    Boolean addProductToWishList (PlainUser plainUser, Long userId) throws EmptyDataException;
+    Boolean addProductToWishList (User user, Long userId);
 }

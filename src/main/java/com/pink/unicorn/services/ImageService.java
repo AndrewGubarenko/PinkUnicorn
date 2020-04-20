@@ -25,10 +25,8 @@ public class ImageService {
     }
 
     @Transactional
-    public List<Image> createImage(Collection<PlainImage> plainImages) {
-        return plainImages.stream().map(plainImage -> {
-            Image image = new Image();
-            image.setPhoto(Base64.getDecoder().decode(plainImage.getPhoto()));
+    public List<Image> createImage(Collection<Image> plainImages) {
+        return plainImages.stream().map(image -> {
             imageRepository.save(image);
             return image;
         }).collect(Collectors.toList());

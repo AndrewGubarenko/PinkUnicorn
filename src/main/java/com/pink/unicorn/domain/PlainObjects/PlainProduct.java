@@ -106,7 +106,6 @@ public class PlainProduct {
     }
 
     public void setSubCategories(Set<String> subCategories) {
-        this.getSubCategories().clear();
-        this.subCategories.addAll(subCategories);
+        this.subCategories = subCategories;
     }
 }

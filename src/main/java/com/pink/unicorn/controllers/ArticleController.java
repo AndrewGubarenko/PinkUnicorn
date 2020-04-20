@@ -1,5 +1,6 @@
 package com.pink.unicorn.controllers;
 
+import com.pink.unicorn.domain.Article;
 import com.pink.unicorn.domain.PlainObjects.PlainArticle;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.services.ArticleService;
@@ -32,32 +33,32 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @PostMapping(path = "/admin/articles/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainArticle> createArticle(@RequestBody PlainArticle article) throws EmptyDataException {
+    @PostMapping(path = "/admin/articles")
+    public ResponseEntity<PlainArticle> createArticle(@RequestBody Article article) {
         PlainArticle response = articleService.createArticle(article);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(path = "/articles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "/articles")
     public ResponseEntity<List<PlainArticle>> getListOfArticles() {
         List<PlainArticle> response = articleService.getListOfArticles();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping(path = "/articles/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainArticle> getArticle(@PathVariable Long id) throws EmptyDataException{
+    @GetMapping(path = "/articles/{id}")
+    public ResponseEntity<PlainArticle> getArticle(@PathVariable Long id) {
         PlainArticle response = articleService.getArticle(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PutMapping(path = "/articles/{id}/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PlainArticle> updateArticle(@RequestBody PlainArticle article, @PathVariable Long id) throws EmptyDataException {
+    @PutMapping(path = "/articles/{id}")
+    public ResponseEntity<PlainArticle> updateArticle(@RequestBody Article article, @PathVariable Long id)  {
         PlainArticle response = articleService.updateArticle(article, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping(path = "/articles/{id}/delete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> deleteArticle(@PathVariable Long id) throws EmptyDataException {
+    @DeleteMapping(path = "/articles/{id}")
+    public ResponseEntity<String> deleteArticle(@PathVariable Long id) {
         String response = articleService.deleteArticle(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

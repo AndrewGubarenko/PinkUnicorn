@@ -1,7 +1,7 @@
 package com.pink.unicorn.services;
 
 import com.pink.unicorn.domain.Category;
-import com.pink.unicorn.domain.PlainObjects.PlainCategory;
+import com.pink.unicorn.domain.Product;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.repositories.CategoryRepository;
 import com.pink.unicorn.services.interfaces.ICategoryService;
@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,20 +25,21 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional
-    public List<Category> findOrCreate(Collection<PlainCategory> plainCategories, Set<String> subCategories) {
-        return plainCategories.stream().map(plainCategory -> {
+    public List<Category> findOrCreate(Collection<Category> categories, Product product) {
+        return categories.stream().map(category -> {
 
-            Optional<Category> foundCategory = categoryRepository.findByName(plainCategory.getName());
+            Optional<Category> foundCategory = categoryRepository.findByName(category.getName());
 
             if (foundCategory.isPresent()) {
                 Category cat = foundCategory.get();
-                cat.getSubCategories().addAll(subCategories);
-                categoryRepository.save(cat);
+                cat.getSubCategories().addAll(product.getSubCategories());
+                cat.addProduct(product);
                 return cat;
             } else {
-                Category cat = new Category(plainCategory.getName());
-                cat.getSubCategories().addAll(subCategories);
+                Category cat = new Category(category.getName());
+                cat.setSubCategories(product.getSubCategories());
                 categoryRepository.save(cat);
+                cat.addProduct(product);
                 return cat;
             }
         }).collect(Collectors.toList());
@@ -52,7 +50,7 @@ public class CategoryService implements ICategoryService {
     public void removeCategory(String categoryName) throws EmptyDataException {
         Optional<Category> categoryForRemoveOpt = categoryRepository.findByName(categoryName);
         if(!categoryForRemoveOpt.isPresent()) {
-            throw new EmptyDataException("Category not exist!");
+            throw new EmptyDataException("Category doesn't exist!");
         }
         Category categoryForRemove = categoryForRemoveOpt.get();
         categoryForRemove.removeAllProducts();

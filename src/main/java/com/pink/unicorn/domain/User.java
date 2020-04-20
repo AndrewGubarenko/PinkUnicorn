@@ -34,8 +34,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @ElementCollection(targetClass = Long.class)
-    @CollectionTable(name="wish_list", joinColumns=@JoinColumn(name="product_id"))
+    @ElementCollection
+    @CollectionTable(name="wish_list")
     private List<Long> wishList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

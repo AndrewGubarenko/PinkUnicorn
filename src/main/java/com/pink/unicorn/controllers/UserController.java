@@ -1,6 +1,8 @@
 package com.pink.unicorn.controllers;
 
+import com.pink.unicorn.domain.PlainObjects.AuthData;
 import com.pink.unicorn.domain.PlainObjects.PlainUser;
+import com.pink.unicorn.domain.User;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import com.pink.unicorn.services.interfaces.IUserService;
 import org.apache.log4j.Logger;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,13 @@ public class UserController {
     }
 
     @PostMapping(path = "/registration")
-    public ResponseEntity<PlainUser> registration(@RequestBody PlainUser plainUser) {
-        PlainUser response = userService.create(plainUser);
+    public ResponseEntity<PlainUser> registration(@RequestBody User user) {
+        PlainUser response = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(path = "/authentication")
-    public ResponseEntity<PlainUser> authenticate(@RequestBody String authData) throws IOException, EmptyDataException{
+    public ResponseEntity<PlainUser> authenticate(@RequestBody AuthData authData) {
         PlainUser respond = userService.findByEmailAndPassword(authData);
 
         return ResponseEntity.status(HttpStatus.OK).body(respond);
@@ -47,19 +48,19 @@ public class UserController {
     }
 
     @GetMapping(path = "/users/{id}")
-    public ResponseEntity<PlainUser> getUser(@PathVariable Long id) throws EmptyDataException {
+    public ResponseEntity<PlainUser> getUser(@PathVariable Long id) {
         PlainUser response = userService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping(path = "/users/{id}")
-    public ResponseEntity<PlainUser> updateUser(@RequestBody PlainUser plainUser, @PathVariable Long id) throws EmptyDataException {
-        PlainUser response = userService.update(plainUser, id);
+    public ResponseEntity<PlainUser> updateUser(@RequestBody User user, @PathVariable Long id) {
+        PlainUser response = userService.update(user, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws EmptyDataException {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         String response = userService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

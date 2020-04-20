@@ -20,11 +20,11 @@ public class Category {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Product> productList = new ArrayList<>();
 
-    @ElementCollection(targetClass = String.class)
-    @CollectionTable(name ="sub_categories" , joinColumns=@JoinColumn(name="category_id"))
+    @ElementCollection
+    @CollectionTable(name="sub_categories")
     private Set<String> subCategories = new HashSet<>();
 
     public Category() {}
@@ -52,18 +52,18 @@ public class Category {
         return productList;
     }
 
+    public void setProductList(List<Product> productList) {
+        this.removeAllProducts();
+        productList.forEach(this::addProduct);
+    }
+
     public Set<String> getSubCategories() {
         return subCategories;
     }
 
     public void setSubCategories(Set<String> subCategories) {
         this.subCategories.clear();
-        this.subCategories.addAll(subCategories);
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.removeAllProducts();
-        productList.forEach(this::addProduct);
+        subCategories.forEach(subCat -> this.subCategories.add(subCat));
     }
 
     public void addProduct(Product product) {
@@ -101,22 +101,16 @@ public class Category {
         Category category = (Category) o;
         return id.equals(category.id) &&
                 name.equals(category.name) &&
-                Objects.equals(productList, category.productList) &&
-                Objects.equals(subCategories, category.subCategories);
+                Objects.equals(productList, category.productList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, productList, subCategories);
+        return Objects.hash(id, name, productList);
     }
 
     @Override
     public String toString() {
-        String subCat = "";
-        Iterator iterator = subCategories.iterator();
-        while (iterator.hasNext()) {
-            subCat += " " + iterator.next();
-        }
         String prodList = "";
         for(int i = 0; i < productList.size(); i++) {
             prodList += " " + productList.get(i);
@@ -125,7 +119,6 @@ public class Category {
                 "id=" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", productList=" + "[ " + prodList + " ]" + '\'' +
-                ", subCategories=" + "[ " + subCat + " ]" + '\'' +
                 '}';
     }
 }

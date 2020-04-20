@@ -35,25 +35,35 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional
-    public PlainOrder createOrder(PlainOrder plainOrder) {
-        Order order = setOrderData(plainOrder, new Order());
+    public PlainOrder createOrder(Order order, Long userId) {
         orderRepository.save(order);
-        User userForAdd = userRepository.findById(plainOrder.getUserId()).get();
+        User userForAdd = userRepository.findById(userId).get();
         order.addUser(userForAdd);
         return orderConverter.OrderToPlain(order);
     }
 
     @Override
     @Transactional
-    public PlainOrder updateOrder(PlainOrder plainOrder, Long id) throws EmptyDataException{
+    public PlainOrder updateOrder(Order resource, Long id) throws EmptyDataException{
         Optional<Order> orderForUpdateOpt = orderRepository.findById(id);
         if (!orderForUpdateOpt.isPresent()) {
             throw new EmptyDataException("No order with id " + id + " exists!" );
         }
-        Order orderForUpdate = setOrderData(plainOrder, orderForUpdateOpt.get());
-        orderRepository.save(orderForUpdate);
+        Order target = orderForUpdateOpt.get();
 
-        return orderConverter.OrderToPlain(orderForUpdate);
+        target.setEmail(resource.getEmail());
+        target.setFirstName(resource.getFirstName());
+        target.setLastName(resource.getLastName());
+        target.setAddress(resource.getAddress());
+        target.setDeliveryType(resource.getDeliveryType());
+        target.setPhone(resource.getPhone());
+        target.setPaymentType(resource.getPaymentType());
+        target.setIsCompleted(resource.getIsCompleted());
+        target.setListOfProductIds(resource.getListOfProductIds());
+
+        orderRepository.save(target);
+
+        return orderConverter.OrderToPlain(target);
     }
 
     @Override
@@ -90,19 +100,4 @@ public class OrderService implements IOrderService {
         }
         return response;
     }
-
-    private Order setOrderData(PlainOrder resource, Order target) {
-        target.setEmail(resource.getEmail());
-        target.setFirstName(resource.getFirstName());
-        target.setLastName(resource.getLastName());
-        target.setAddress(resource.getAddress());
-        target.setDeliveryType(resource.getDeliveryType());
-        target.setPhone(resource.getPhone());
-        target.setPaymentType(resource.getPaymentType());
-        target.setIsCompleted(resource.getIsCompleted());
-        target.setListOfProductIds(resource.getListOfProducts().stream().map(plainProduct -> plainProduct.getId()).collect(Collectors.toList()));
-
-        return target;
-    }
-
 }

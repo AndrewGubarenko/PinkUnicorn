@@ -30,18 +30,17 @@ public class ArticleService implements IArticleService {
 
     @Override
     @Transactional
-    public PlainArticle createArticle(PlainArticle plainArticle) throws EmptyDataException {
-        this.checkForEmptyFields(plainArticle);
+    public PlainArticle createArticle(Article article) {
+        this.checkForEmptyFields(article);
 
-        Article newArticle = this.setArticleData(plainArticle, new Article());
-        articleRepository.save(newArticle);
+        articleRepository.save(article);
 
-        return articleConverter.ArticleToPlain(newArticle);
+        return articleConverter.ArticleToPlain(article);
     }
 
     @Override
     @Transactional
-    public PlainArticle getArticle(Long id) throws EmptyDataException {
+    public PlainArticle getArticle(Long id) {
         Optional<Article> articleOpt = articleRepository.findById(id);
         if(!articleOpt.isPresent()) {
             throw new EmptyDataException("No Article with id " + id + " exist!");
@@ -59,17 +58,23 @@ public class ArticleService implements IArticleService {
 
     @Override
     @Transactional
-    public PlainArticle updateArticle(PlainArticle updatedArticle, Long id) throws EmptyDataException {
-        this.checkForEmptyFields(updatedArticle);
+    public PlainArticle updateArticle(Article source, Long id) throws EmptyDataException {
+        this.checkForEmptyFields(source);
 
         Optional<Article> articleForUpdateOpt = articleRepository.findById(id);
         if(!articleForUpdateOpt.isPresent()) {
             throw new EmptyDataException("No Article with id " + id + " exist!");
         }
-        Article articleForUpdate = this.setArticleData(updatedArticle, articleForUpdateOpt.get());
-        articleRepository.save(articleForUpdate);
+        Article target = articleForUpdateOpt.get();
 
-        return articleConverter.ArticleToPlain(articleForUpdate);
+        target.setTheme(source.getTheme());
+        target.setShortPreview(source.getShortPreview());
+        target.setTextOfArticle(source.getTextOfArticle());
+        target.setPicture(Base64.getDecoder().decode(source.getPicture()));
+
+        articleRepository.save(target);
+
+        return articleConverter.ArticleToPlain(target);
     }
 
     @Override
@@ -84,24 +89,15 @@ public class ArticleService implements IArticleService {
         return "Article with theme: \"" + theme + "\" was completely removed";
     }
 
-    private void checkForEmptyFields (PlainArticle plainArticle) throws EmptyDataException{
-        if(plainArticle.getTheme().equals("") || plainArticle.getTheme() == null) {
+    private void checkForEmptyFields (Article article) {
+        if(article.getTheme().equals("") || article.getTheme() == null) {
             throw new EmptyDataException("Theme field is empty!");
         }
-        if(plainArticle.getShortPreview().equals("") || plainArticle.getShortPreview() == null) {
+        if(article.getShortPreview().equals("") || article.getShortPreview() == null) {
             throw new EmptyDataException("Short preview field is empty!");
         }
-        if(plainArticle.getTextOfArticle().equals("") || plainArticle.getTextOfArticle() == null) {
+        if(article.getTextOfArticle().equals("") || article.getTextOfArticle() == null) {
             throw new EmptyDataException("Text of plainArticle field is empty!");
         }
     }
-
-    private Article setArticleData (PlainArticle source, Article target) {
-        target.setTheme(source.getTheme());
-        target.setShortPreview(source.getShortPreview());
-        target.setTextOfArticle(source.getTextOfArticle());
-        target.setPicture(Base64.getDecoder().decode(source.getPicture()));
-        return target;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.pink.unicorn.services.interfaces;
 
+import com.pink.unicorn.domain.Order;
 import com.pink.unicorn.domain.PlainObjects.PlainOrder;
 import com.pink.unicorn.exceptions.EmptyDataException;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,30 +15,29 @@ public interface IOrderService {
 
     /**
      * <p>Method for creating order.</p>
-     * @param plainOrder
+     * @param order
+     * @param userId
      * @return PlainOrder
      */
     @Transactional
-    PlainOrder createOrder(PlainOrder plainOrder);
+    PlainOrder createOrder(Order order, Long userId);
 
     /**
      * <p>Method for updating order.</p>
-     * @param plainOrder
+     * @param order
      * @param id
      * @return PlainOrder
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainOrder updateOrder(PlainOrder plainOrder, Long id) throws EmptyDataException;
+    PlainOrder updateOrder(Order order, Long id);
 
     /**
      * <p>Method for getting order.</p>
      * @param id
      * @return PlainOrder
-     * @throws EmptyDataException
      */
     @Transactional
-    PlainOrder getOrder(Long id) throws EmptyDataException;
+    PlainOrder getOrder(Long id);
 
     /**
      * <p>Method for getting list of orders.</p>
@@ -52,8 +52,7 @@ public interface IOrderService {
      * @param orderId
      * @param userId
      * @return String
-     * @throws EmptyDataException
      */
     @Transactional
-    String deleteOrder(Long orderId, Long userId) throws EmptyDataException;
+    String deleteOrder(Long orderId, Long userId);
 }

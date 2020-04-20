@@ -39,25 +39,32 @@ public class ProductService implements IProductService {
 
     @Override
     @Transactional
-    public PlainProduct createProduct(PlainProduct plainProduct) {
+    public PlainProduct createProduct(Product product) {
 
-        Product newProduct = setProductData(plainProduct, new Product());
+        Product newProduct = setProductData(product, new Product());
 
         productRepository.save(newProduct);
 
-        imageService.createImage(plainProduct.getImages()).forEach(image -> newProduct.addImage(image));
-        categoryService.findOrCreate(plainProduct.getCategories(), plainProduct.getSubCategories()).forEach(category -> newProduct.addCategory(category));
+        imageService.createImage(product.getImages()).forEach(image -> newProduct.addImage(image));
+        categoryService.findOrCreate(product.getCategories(), newProduct);
         return productConverter.ProductToPlain(newProduct);
     }
 
     @Override
     @Transactional
-    public PlainProduct updateProduct(PlainProduct updatedPlainProduct, Long productId) throws EmptyDataException {
+    public PlainProduct updateProduct(Product updatedProduct, Long productId) throws EmptyDataException {
         Optional<Product> foundProductOpt = productRepository.findById(productId);
         if (!foundProductOpt.isPresent()) {
             throw new EmptyDataException("No product with id " + productId + " exists!" );
         }
-        Product result = setProductData(updatedPlainProduct, foundProductOpt.get());
+        Product result = foundProductOpt.get();
+        result.setName(updatedProduct.getName());
+        result.setBrand(updatedProduct.getBrand());
+        result.setDescription(updatedProduct.getDescription());
+        result.setInSale(updatedProduct.isInSale());
+        result.setPrice(updatedProduct.getPrice());
+        result.setSalePrice(updatedProduct.getSalePrice());
+        result.setCount(updatedProduct.getCount());
 
         productRepository.save(result);
 
@@ -86,13 +93,7 @@ public class ProductService implements IProductService {
     @Transactional
     public List<PlainProduct> getFilteredProductList(List<String> filters) {
         List<PlainProduct> result = new ArrayList<>();
-        Set<Long> ids = new HashSet<>();
-        filters.forEach(category -> productRepository.findAllByCategories(categoryRepository.findByName(category).get()).forEach(product -> {
-            if(!ids.contains(product.getId())) {
-                ids.add(product.getId());
-                result.add(productConverter.ProductToPlain(product));
-            }
-        }));
+        //TODO: realize method for searching
         return result;
     }
 
@@ -111,7 +112,7 @@ public class ProductService implements IProductService {
         return "Product " + productName + " was completely removed";
     }
 
-    private Product setProductData(PlainProduct source, Product target) {
+    private Product setProductData(Product source, Product target) {
         target.setName(source.getName());
         target.setBrand(source.getBrand());
         target.setDescription(source.getDescription());

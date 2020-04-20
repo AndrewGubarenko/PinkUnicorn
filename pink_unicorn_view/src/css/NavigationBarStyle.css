@@ -172,6 +172,10 @@
   bottom: -12px;
 }
 
+#header__categories__small {
+  display: none;
+}
+
 /* media
 ============================*/
 
@@ -202,7 +206,7 @@
   }
 
   .nav__subcat {
-    color: #000;
+    color: #b5003c;
   }
 
   .nav__subcat:hover {

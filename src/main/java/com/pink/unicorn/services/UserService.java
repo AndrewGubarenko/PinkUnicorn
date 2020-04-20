@@ -1,7 +1,6 @@
 package com.pink.unicorn.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pink.unicorn.domain.PlainObjects.AuthData;
 import com.pink.unicorn.domain.PlainObjects.PlainUser;
 import com.pink.unicorn.domain.Role;
 import com.pink.unicorn.domain.User;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,29 +24,26 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final ObjectMapper objectMapper;
     private final UserConverter userConverter;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       ObjectMapper objectMapper,
                        UserConverter userConverter,
                        BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.objectMapper = objectMapper;
         this.userConverter = userConverter;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
-    public PlainUser create(PlainUser plainUser) {
+    public PlainUser create(User user) {
         User newUser = new User();
 
-        newUser.setEmail(plainUser.getEmail());
-        newUser.setPassword(passwordEncoder.encode(plainUser.getPassword()));
-        newUser.setPhone(plainUser.getPhone());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setPhone(user.getPhone());
         Set<Role> roles = new HashSet<>();
         roles.add(Role.USER);
         newUser.setRoles(roles);
@@ -59,14 +54,14 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public PlainUser update(PlainUser updatedPlaneUser, Long id) throws EmptyDataException {
+    public PlainUser update(User updatedUser, Long id) {
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
             throw new EmptyDataException("No user with id " + id + " exists!" );
         }
         User userForUpdate = userForUpdateOpt.get();
-        userForUpdate.setPassword(passwordEncoder.encode(updatedPlaneUser.getPassword()));
-        userForUpdate.setPhone(updatedPlaneUser.getPhone());
+        userForUpdate.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        userForUpdate.setPhone(updatedUser.getPhone());
 
         userRepository.save(userForUpdate);
 
@@ -75,7 +70,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public PlainUser get(Long id) throws EmptyDataException {
+    public PlainUser get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
             throw new EmptyDataException("No user with id " + id + " exists!" );
@@ -86,16 +81,15 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public PlainUser findByEmailAndPassword(String authData) throws IOException, EmptyDataException{
-        JsonNode rootNode = objectMapper.readTree(authData);
-        if (rootNode.path("email").asText().equals("")) {
+    public PlainUser findByEmailAndPassword(AuthData authData) {
+
+        if (authData.getEmail().equals("") || authData.getEmail() == null) {
             throw new EmptyDataException("Empty EMAIL field");
-        } else if (rootNode.path("password").asText().equals("")) {
+        } else if (authData.getPassword().equals("") || authData.getPassword() == null) {
             throw new EmptyDataException("Empty PASSWORD field");
         }
-        String email = rootNode.path("email").asText().toLowerCase();
-        String password = rootNode.path("password").asText();
-        Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
+
+        Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(authData.getEmail(), passwordEncoder.encode(authData.getPassword()));
         if (!foundUserOpt.isPresent()) {
             throw new NoSuchElementException();
         }
@@ -120,12 +114,12 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public Boolean addProductToWishList (PlainUser plainUser, Long userId) throws EmptyDataException {
+    public Boolean addProductToWishList (User user, Long userId) throws EmptyDataException {
         Optional<User> userForAddWishListOpt = userRepository.findById(userId);
         if (!userForAddWishListOpt.isPresent()) {
             throw new EmptyDataException("No user with id " + userId + " exists!" );
         }
-        List<Long> listOfProductIds = plainUser.getWishList().stream().map(plainProduct -> plainProduct.getId()).collect(Collectors.toList());
+        List<Long> listOfProductIds = user.getWishList().stream().collect(Collectors.toList());
         User userForAddWishList = userForAddWishListOpt.get();
         userForAddWishList.setWishList(listOfProductIds);
         return true;

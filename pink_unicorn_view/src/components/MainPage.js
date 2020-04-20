@@ -7,17 +7,10 @@ import FOR_BOTH from "./../statics/images/main_page/for_both.jpg";
 import HITS from "./../statics/images/main_page/hits.jpg";
 import SALE from "./../statics/images/main_page/sale.jpg";
 import ARTICLES from "./../statics/images/main_page/articles.jpg";
-import product1 from "./../statics/images/main_page/product1.jpg";
-import product2 from "./../statics/images/main_page/product2.jpg";
-import product3 from "./../statics/images/main_page/product3.jpg";
-import article1 from "./../statics/images/main_page/article1.jpg";
-import article2 from "./../statics/images/main_page/article2.png";
-import article3 from "./../statics/images/main_page/article3.png";
 import delivery from "./../statics/images/main_page/delivery.png";
 import returning from "./../statics/images/main_page/return.png";
 import send from "./../statics/images/main_page/send.png";
 import {Link} from 'react-router-dom';
-import Carousel from 'react-elastic-carousel';
 
 class MainPage extends React.Component {
 
@@ -92,46 +85,7 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <Carousel ref={ref => (this.carousel1 = ref)}
-                        breakPoints={this.props.breakPoints}
-                        renderArrow={this.props.myArrow}
-                        pagination={false}
-                        onNextStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel1.goTo(0)
-                                        }
-                                      }
-                                    }
-                        onPrevStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel1.goTo(10)
-                                        }
-                                      }
-                                    }>
-                <div className="product__item">
-                  <img className="product__image" src={product1} alt="" />
-                  <div className="product__name">Маструбатор Svacom</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={product2} alt="" />
-                  <div className="product__name">Лубрикант на водной основе JO</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={product3} alt="" />
-                  <div className="product__name">Маструбатор Blow You</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={product3} alt="" />
-                  <div className="product__name">Маструбатор Blow You</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-              </Carousel>
+                {this.props.carouselProduct}
             </div>
 
           </div>
@@ -147,82 +101,7 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <Carousel ref={ref => (this.carousel2 = ref)}
-                        breakPoints={this.props.breakPoints}
-                        renderArrow={this.props.myArrow}
-                        pagination={false}
-                        onNextStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel2.goTo(0)
-                                        }
-                                      }
-                                    }
-                        onPrevStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel2.goTo(10)
-                                        }
-                                      }
-                                    }>
-                <div className="product__item">
-                  <div>
-                    <div className="sale__sprite__number">-5%</div>
-                    <svg className="sale__sprite">
-                      <use xlinkHref="#sale" />
-                    </svg>
-                  </div>
-                  <img className="product__image" src={product1} alt="" />
-                  <div className="product__name">Маструбатор Svacom</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <div>
-                    <div className="sale__sprite__number">-15%</div>
-                    <svg className="sale__sprite">
-                      <use xlinkHref="#sale" />
-                    </svg>
-                  </div>
-                  <img className="product__image" src={product2} alt="" />
-                  <div className="product__name">Лубрикант на водной основе JO</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <div>
-                    <div className="sale__sprite__number">-5%</div>
-                    <svg className="sale__sprite">
-                      <use xlinkHref="#sale" />
-                    </svg>
-                  </div>
-                  <img className="product__image" src={product3} alt="" />
-                  <div className="product__name">Маструбатор Blow You</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <div>
-                    <div className="sale__sprite__number">-5%</div>
-                    <svg className="sale__sprite">
-                      <use xlinkHref="#sale" />
-                    </svg>
-                  </div>
-                  <img className="product__image" src={product3} alt="" />
-                  <div className="product__name">Маструбатор Blow You</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <div>
-                    <div className="sale__sprite__number">-5%</div>
-                    <svg className="sale__sprite">
-                      <use xlinkHref="#sale" />
-                    </svg>
-                  </div>
-                  <img className="product__image" src={product3} alt="" />
-                  <div className="product__name">Маструбатор Blow You</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-              </Carousel>
+              {this.props.carouselSale}
             </div>
           </div>
 
@@ -237,46 +116,7 @@ class MainPage extends React.Component {
             </div>
             {/*SCROLLING_BLOCK*/}
             <div className="carousel__block">
-              <Carousel ref={ref => (this.carousel3 = ref)}
-                        breakPoints={this.props.breakPoints}
-                        renderArrow={this.props.myArrow}
-                        pagination={false}
-                        onNextStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel3.goTo(0)
-                                        }
-                                      }
-                                    }
-                        onPrevStart={(currentItem, nextItem) => {
-                                        if(currentItem.index === nextItem.index ){
-                                          this.carousel3.goTo(10)
-                                        }
-                                      }
-                                    }>
-                <div className="product__item">
-                  <img className="product__image" src={article1} alt="" />
-                  <div className="product__name">Страсть или ...?</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={article2} alt="" />
-                  <div className="product__name">Оральные ласки</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={article3} alt="" />
-                  <div className="product__name">Как выбрать лубрикант?</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-
-                <div className="product__item">
-                  <img className="product__image" src={article2} alt="" />
-                  <div className="product__name">Оральные ласки</div>
-                  <Link className="button button--rose product__button" to="#">купить</Link>
-                </div>
-              </Carousel>
+              {this.props.carouselArticle}
             </div>
           </div>
 

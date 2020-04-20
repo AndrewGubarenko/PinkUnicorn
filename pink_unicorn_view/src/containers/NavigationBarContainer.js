@@ -1,9 +1,6 @@
 import React from 'react';
 import NavigationBar from './../components/NavigationBar';
-import {createStore} from 'redux';
-import allReducers from './../reducers/allReducers.js'
-
-const store = createStore(allReducers);
+import CategoriesContainer from './CategoriesContainer'
 
 class NavigationBarContainer extends React.Component {
   constructor(props) {
@@ -44,6 +41,7 @@ class NavigationBarContainer extends React.Component {
         onChangeFieldData={this.onChangeFieldData}
         onClickSearch={this.onClickSearch}
         onClickBurger={this.onClickBurger}
+        categories={<CategoriesContainer/>}
         />
     );
   }
