@@ -42,9 +42,7 @@ public class UserController {
     @PostMapping(path = "/authentication")
     public ResponseEntity<PlainUser> authenticate(@RequestBody AuthData authData) {
         PlainUser respond = userService.findByEmailAndPassword(authData);
-
         return ResponseEntity.status(HttpStatus.OK).body(respond);
-
     }
 
     @GetMapping(path = "/users/{id}")

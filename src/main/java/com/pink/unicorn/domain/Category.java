@@ -23,7 +23,7 @@ public class Category {
     @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Product> productList = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name="sub_categories")
     private Set<String> subCategories = new HashSet<>();
 
