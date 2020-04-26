@@ -1,4 +1,8 @@
-package com.pink.unicorn.domain.PlainObjects;
+package com.pink.unicorn.representations;
+
+import com.pink.unicorn.domain.PlainObjects.PlainArticle;
+import com.pink.unicorn.domain.PlainObjects.PlainCategory;
+import com.pink.unicorn.domain.PlainObjects.PlainProduct;
 
 import java.util.Set;
 

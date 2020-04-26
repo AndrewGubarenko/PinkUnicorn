@@ -1,6 +1,6 @@
 package com.pink.unicorn.services;
 
-import com.pink.unicorn.domain.PlainObjects.MainPageRepresentation;
+import com.pink.unicorn.representations.MainPageRepresentation;
 import com.pink.unicorn.repositories.ArticleRepository;
 import com.pink.unicorn.repositories.CategoryRepository;
 import com.pink.unicorn.repositories.ProductRepository;

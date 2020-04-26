@@ -1,8 +1,12 @@
-package com.pink.unicorn.controllers;
+package com.pink.unicorn.controllers.exceptions;
 
+import com.pink.unicorn.controllers.UserController;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,9 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:test_application_context.xml")
-@WebAppConfiguration
-@Transactional
+@WebAppConfiguration(value = "/WEB-INF/web.xml")
+@RunWith(JUnitPlatform.class)
 public class UserControllerExceptionTest {
+
+    private static final Logger LOGGER = Logger.getLogger(UserControllerExceptionTest.class.getSimpleName());
 
     @Autowired
     private UserController userController;
@@ -31,59 +36,62 @@ public class UserControllerExceptionTest {
 
     @BeforeEach
     public void setUp() {
+        LOGGER.info("@BeforeEach: (outer); setUp()");
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.userController).build();
     }
 
     @Test
     public void test() {
+        LOGGER.info("@Test: (outer); test()");
         assertNotNull(userController);
         assertNotNull(mockMvc);
     }
 
-    //TODO: repair this test
-    /*@Test
+    @Test
     public void onConflictingUserEmailTest() throws Exception{
-        mockMvc.perform(post("/user/registration")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        LOGGER.info("@Test: (outer); onConflictingUserEmailTest()");
+        mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "\t\"email\":\"123\",\n" +
                         "\t\"password\":\"123\",\n" +
-                        "\t\"phone\":\"0504121271\"\n" +
-                        "}"))
-                .andDo(print());
-        mockMvc.perform(post("/user/registration")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        "\t\"phone\":\"0000000000\"\n" +
+                        "}"));
+        mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "\t\"email\":\"123\",\n" +
                         "\t\"password\":\"123\",\n" +
-                        "\t\"phone\":\"0504121271\"\n" +
+                        "\t\"phone\":\"0000000000\"\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().string("DataIntegrityViolationException: User with such email already registered."));
-    }*/
+    }
 
     @Test
     public void onEmptyDataExceptionTest() throws Exception {
-        mockMvc.perform(post("/user/registration")
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        LOGGER.info("@Test: (outer); onEmptyDataExceptionTest()");
+        mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "\t\"email\":\"\",\n" +
                         "\t\"password\":\"123\",\n" +
-                        "\t\"phone\":\"0504121271\"\n" +
+                        "\t\"phone\":\"0000000000\"\n" +
                         "}"))
                 .andDo(print())
-                .andExpect(status().isConflict())
-                .andExpect(content().string("EmptyDataException: One or more data`s fields are empty."));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Empty EMAIL field"));
     }
 
     @Test
     public void onMissingUserTest() throws Exception {
-        mockMvc.perform(get("/user/1")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        LOGGER.info("@Test: (outer); onMissingUserTest()");
+        mockMvc.perform(get("/users/3")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("NoSuchElementException: No such user was found"));
+                .andExpect(content().string("No user with id 3 exists!"));
     }
 
 }

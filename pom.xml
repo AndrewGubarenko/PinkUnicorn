@@ -10,7 +10,7 @@
             <name>Andrii Hubarenko</name>
             <email>AndrewGubarenko@gmail.com</email>
             <roles>
-                <role>full stack developer</role>
+                <role>developer</role>
             </roles>
             <timezone>+2</timezone>
         </developer>
@@ -139,7 +139,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.10</version>
+            <version>2.11.0.rc1</version>
         </dependency>
 
         <dependency>

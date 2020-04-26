@@ -30,7 +30,7 @@ public class UserConverter {
 
         result.setId(user.getId());
         result.setEmail(user.getEmail());
-        result.setPassword(user.getPassword());
+        result.setPassword("");
         result.setPhone(user.getPhone());
         result.setRoles(user.getRoles());
         if(!(user.getWishList() == null)) {

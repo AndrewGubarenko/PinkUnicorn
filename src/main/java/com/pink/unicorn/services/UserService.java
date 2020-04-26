@@ -39,6 +39,13 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public PlainUser create(User user) {
+
+        if (user.getEmail() == null || user.getEmail().equals("")) {
+            throw new EmptyDataException("Empty EMAIL field");
+        } else if (user.getPassword() == null || user.getPassword().equals("")) {
+            throw new EmptyDataException("Empty PASSWORD field");
+        }
+
         User newUser = new User();
 
         newUser.setEmail(user.getEmail());
@@ -55,6 +62,13 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public PlainUser update(User updatedUser, Long id) {
+
+        if (updatedUser.getEmail() == null || updatedUser.getEmail().equals("")) {
+            throw new EmptyDataException("Empty EMAIL field");
+        } else if (updatedUser.getPassword() == null || updatedUser.getPassword().equals("")) {
+            throw new EmptyDataException("Empty PASSWORD field");
+        }
+
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
             throw new EmptyDataException("No user with id " + id + " exists!" );
@@ -73,7 +87,7 @@ public class UserService implements IUserService {
     public PlainUser get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + id + " exists!" );
+            throw new NoSuchElementException("No user with id " + id + " exists!" );
         }
         User result = foundUserOpt.get();
         return userConverter.UserToPlain(result);
@@ -83,25 +97,25 @@ public class UserService implements IUserService {
     @Transactional(readOnly = true)
     public PlainUser findByEmailAndPassword(AuthData authData) {
 
-        if (authData.getEmail().equals("") || authData.getEmail() == null) {
+        if (authData.getEmail() == null || authData.getEmail().equals("")) {
             throw new EmptyDataException("Empty EMAIL field");
-        } else if (authData.getPassword().equals("") || authData.getPassword() == null) {
+        } else if (authData.getPassword() == null || authData.getPassword().equals("")) {
             throw new EmptyDataException("Empty PASSWORD field");
         }
 
         Optional<User> foundUserOpt = userRepository.findByEmailAndPassword(authData.getEmail(), passwordEncoder.encode(authData.getPassword()));
         if (!foundUserOpt.isPresent()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Wrong user email or password" );
         }
         return userConverter.UserToPlain(foundUserOpt.get());
     }
 
     @Override
     @Transactional
-    public String delete(Long id) throws EmptyDataException {
+    public String delete(Long id) {
         Optional<User> userForDeleteOpt = userRepository.findById(id);
         if (!userForDeleteOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + id + " exists!" );
+            throw new NoSuchElementException("No user with id " + id + " exists!" );
         }
         User userForDelete = userForDeleteOpt.get();
         userForDelete.removeAllOrders();
@@ -114,10 +128,10 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public Boolean addProductToWishList (User user, Long userId) throws EmptyDataException {
+    public Boolean addProductToWishList (User user, Long userId) {
         Optional<User> userForAddWishListOpt = userRepository.findById(userId);
         if (!userForAddWishListOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + userId + " exists!" );
+            throw new NoSuchElementException("No user with id " + userId + " exists!" );
         }
         List<Long> listOfProductIds = user.getWishList().stream().collect(Collectors.toList());
         User userForAddWishList = userForAddWishListOpt.get();

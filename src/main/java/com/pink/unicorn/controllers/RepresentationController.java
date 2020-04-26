@@ -1,6 +1,6 @@
 package com.pink.unicorn.controllers;
 
-import com.pink.unicorn.domain.PlainObjects.MainPageRepresentation;
+import com.pink.unicorn.representations.MainPageRepresentation;
 import com.pink.unicorn.services.RepresentationService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
