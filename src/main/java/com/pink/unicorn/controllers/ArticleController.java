@@ -68,41 +68,45 @@ public class ArticleController {
      */
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getLocalizedMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingArticle(EmptyResultDataAccessException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
-                + ": No such element was found"
-                + "/ ");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(": No such element was found")
+                                                                        .append("/ ")
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingArticleId(NoSuchElementException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass())
-                + ": No such article was found"
-                + "/ ");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(": No such article was found")
+                                                                        .append("/ ")
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleIOException(IOException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": Check the arguments!"
-                + "/ "
-                + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(": Check the arguments!")
+                                                                    .append("/ ")
+                                                                    .append(e.getLocalizedMessage())
+                                                                    .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleSQLException(SQLException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass())
-                + ": SQL statement problem"
-                + "/ "
-                + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(": SQL statement problem")
+                                                                    .append("/ ")
+                                                                    .append(e.getLocalizedMessage())
+                                                                    .toString());
     }
 }

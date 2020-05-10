@@ -33,7 +33,7 @@ public class UserServiceTest {
 
     @BeforeAll
     public static void init() {
-        LOGGER.info("@BeforeAll: (outer); init()");
+        LOGGER.info("@BeforeAll: init()");
 
         user = new User();
         user.setEmail("qwerty@qwe.qw");
@@ -46,18 +46,18 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        LOGGER.info("@BeforeEach: (outer); setUp()");
+        LOGGER.info("@BeforeEach: setUp()");
     }
 
     @AfterAll
     public static void tearDown() {
-        LOGGER.info("@AfterAll: (outer); tearDown()");
+        LOGGER.info("@AfterAll: tearDown()");
     }
 
     @Test
     @Order(1)
     public void createUserTest() {
-        LOGGER.info("@Test: (outer); createUserTest()");
+        LOGGER.info("@Test: createUserTest()");
 
         PlainUser actual = userService.create(user);
 
@@ -74,7 +74,7 @@ public class UserServiceTest {
     @Test
     @Order(2)
     public void getUserTest() {
-        LOGGER.info("@Test: (outer); getUserTest()");
+        LOGGER.info("@Test: getUserTest()");
 
         PlainUser actual = userService.get(1l);
 
@@ -91,7 +91,7 @@ public class UserServiceTest {
     @Test
     @Order(3)
     public void updateUserTest() {
-        LOGGER.info("@Test: (outer); updateUserTest()");
+        LOGGER.info("@Test: updateUserTest()");
 
         user.setPhone("1111111111");
         user.setPassword("123");
@@ -106,7 +106,7 @@ public class UserServiceTest {
     @Test
     @Order(4)
     public void deleteUserTest() {
-        LOGGER.info("@Test: (outer); updateUserTest()");
+        LOGGER.info("@Test: updateUserTest()");
 
         String actual = userService.delete(1l);
         String expected = "User with email qwerty@qwe.qw was completely removed";

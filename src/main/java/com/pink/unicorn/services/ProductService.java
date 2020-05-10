@@ -55,7 +55,7 @@ public class ProductService implements IProductService {
     public PlainProduct updateProduct(Product updatedProduct, Long productId) throws EmptyDataException {
         Optional<Product> foundProductOpt = productRepository.findById(productId);
         if (!foundProductOpt.isPresent()) {
-            throw new EmptyDataException("No product with id " + productId + " exists!" );
+            throw new EmptyDataException(new StringBuilder("No product with id ").append(productId).append(" exists!").toString());
         }
         Product result = foundProductOpt.get();
         result.setName(updatedProduct.getName());
@@ -76,7 +76,7 @@ public class ProductService implements IProductService {
     public PlainProduct getProduct(Long productId) throws EmptyDataException {
         Optional<Product> foundProductOpt = productRepository.findById(productId);
         if (!foundProductOpt.isPresent()) {
-            throw new EmptyDataException("No product with id " + productId + " exists!");
+            throw new EmptyDataException(new StringBuilder("No product with id ").append(productId).append(" exists!").toString());
         }
         Product result = foundProductOpt.get();
         return productConverter.ProductToPlain(result);
@@ -102,14 +102,14 @@ public class ProductService implements IProductService {
     public String deleteProduct(Long id) throws EmptyDataException {
         Optional<Product> productForDeleteOpt = productRepository.findById(id);
         if (!productForDeleteOpt.isPresent()) {
-            throw new EmptyDataException("No product with id " + id + "exists!");
+            throw new EmptyDataException(new StringBuilder("No product with id ").append(id).append("exists!").toString());
         }
         Product productForDelete = productForDeleteOpt.get();
         String productName = productForDelete.getName();
         productForDelete.removeAllImages();
         productForDelete.removeAllCategories();
         productRepository.delete(productForDelete);
-        return "Product " + productName + " was completely removed";
+        return new StringBuilder("Product ").append(productName).append(" was completely removed").toString();
     }
 
     private Product setProductData(Product source, Product target) {

@@ -43,7 +43,7 @@ public class ArticleService implements IArticleService {
     public PlainArticle getArticle(Long id) {
         Optional<Article> articleOpt = articleRepository.findById(id);
         if(!articleOpt.isPresent()) {
-            throw new EmptyDataException("No Article with id " + id + " exist!");
+            throw new EmptyDataException(new StringBuilder("No Article with id ").append(id).append(" exist!").toString());
         }
         return articleConverter.ArticleToPlain(articleOpt.get());
     }
@@ -63,7 +63,8 @@ public class ArticleService implements IArticleService {
 
         Optional<Article> articleForUpdateOpt = articleRepository.findById(id);
         if(!articleForUpdateOpt.isPresent()) {
-            throw new EmptyDataException("No Article with id " + id + " exist!");
+
+            throw new EmptyDataException(new StringBuilder("No Article with id ").append(id).append(" exist!").toString());
         }
         Article target = articleForUpdateOpt.get();
 
@@ -82,11 +83,11 @@ public class ArticleService implements IArticleService {
     public String deleteArticle(Long id) throws EmptyDataException {
         Optional<Article> articleForDeleteOpt = articleRepository.findById(id);
         if(!articleForDeleteOpt.isPresent()) {
-            throw new EmptyDataException("No Article with id " + id + " exists");
+            throw new EmptyDataException(new StringBuilder("No Article with id ").append(id).append(" exists").toString());
         }
         String theme = articleForDeleteOpt.get().getTheme();
         articleRepository.delete(articleForDeleteOpt.get());
-        return "Article with theme: \"" + theme + "\" was completely removed";
+        return new StringBuilder("Article with theme: \"").append(theme).append("\" was completely removed").toString();
     }
 
     private void checkForEmptyFields (Article article) {

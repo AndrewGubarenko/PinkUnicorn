@@ -68,37 +68,48 @@ public class UserController {
      */
     @ExceptionHandler
     public ResponseEntity<String> onConflictingUserEmail(DataIntegrityViolationException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": User with such email already registered.");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(": User with such email already registered.")
+                                                                    .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getLocalizedMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingUser(EmptyResultDataAccessException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such user was found");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(": No such user was found")
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingUserId(NoSuchElementException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(" ")
+                                                                        .append(e.getLocalizedMessage())
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleIOException(IOException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": Check the arguments!");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(" : Check the arguments!")
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleSQLException(SQLException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": SQL statement problem");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(" : SQL statement problem")
+                                                                    .toString());
     }
 }

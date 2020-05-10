@@ -71,7 +71,7 @@ public class UserService implements IUserService {
 
         Optional<User> userForUpdateOpt = userRepository.findById(id);
         if (!userForUpdateOpt.isPresent()) {
-            throw new EmptyDataException("No user with id " + id + " exists!" );
+            throw new EmptyDataException(new StringBuilder("No user with id ").append(id).append(" exists!").toString());
         }
         User userForUpdate = userForUpdateOpt.get();
         userForUpdate.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -87,7 +87,7 @@ public class UserService implements IUserService {
     public PlainUser get(Long id) {
         Optional<User> foundUserOpt = userRepository.findById(id);
         if (!foundUserOpt.isPresent()) {
-            throw new NoSuchElementException("No user with id " + id + " exists!" );
+            throw new NoSuchElementException(new StringBuilder("No user with id ").append(id).append(" exists!").toString());
         }
         User result = foundUserOpt.get();
         return userConverter.UserToPlain(result);
@@ -115,7 +115,7 @@ public class UserService implements IUserService {
     public String delete(Long id) {
         Optional<User> userForDeleteOpt = userRepository.findById(id);
         if (!userForDeleteOpt.isPresent()) {
-            throw new NoSuchElementException("No user with id " + id + " exists!" );
+            throw new NoSuchElementException(new StringBuilder("No user with id ").append(id).append(" exists!").toString());
         }
         User userForDelete = userForDeleteOpt.get();
         userForDelete.removeAllOrders();
@@ -123,7 +123,7 @@ public class UserService implements IUserService {
         userForDelete.getRoles().clear();
         String userEmail = userForDelete.getEmail();
         userRepository.delete(userForDelete);
-        return "User with email " + userEmail + " was completely removed";
+        return new StringBuilder("User with email ").append(userEmail).append(" was completely removed").toString();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class UserService implements IUserService {
     public Boolean addProductToWishList (User user, Long userId) {
         Optional<User> userForAddWishListOpt = userRepository.findById(userId);
         if (!userForAddWishListOpt.isPresent()) {
-            throw new NoSuchElementException("No user with id " + userId + " exists!" );
+            throw new NoSuchElementException(new StringBuilder("No user with id ").append(userId).append(" exists!").toString());
         }
         List<Long> listOfProductIds = user.getWishList().stream().collect(Collectors.toList());
         User userForAddWishList = userForAddWishListOpt.get();

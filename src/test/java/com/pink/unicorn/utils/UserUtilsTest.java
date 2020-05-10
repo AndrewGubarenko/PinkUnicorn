@@ -31,12 +31,12 @@ public class UserUtilsTest {
 
     @BeforeAll
     public static void init() {
-        LOGGER.info("@BeforeAll: (outer); init()");
+        LOGGER.info("@BeforeAll: init()");
     }
 
     @AfterAll
     public static void tearDown() {
-        LOGGER.info("@AfterAll: (outer); tearDown()");
+        LOGGER.info("@AfterAll: tearDown()");
     }
 
     @BeforeEach

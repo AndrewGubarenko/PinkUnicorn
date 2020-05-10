@@ -34,14 +34,14 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        LOGGER.info("@BeforeEach: (outer); setUp()");
+        LOGGER.info("@BeforeEach: setUp()");
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.userController).build();
     }
 
     @Test
     @Order(1)
     public void test() {
-        LOGGER.info("@Test: (outer); test()");
+        LOGGER.info("@Test: test()");
         assertNotNull(userController);
         assertNotNull(mockMvc);
     }
@@ -49,7 +49,7 @@ public class UserControllerTest {
     @Test
     @Order(2)
     public void createUserTest() throws Exception{
-        LOGGER.info("@Test: (outer); createUserTest()");
+        LOGGER.info("@Test: createUserTest()");
         mockMvc.perform(post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -71,7 +71,7 @@ public class UserControllerTest {
     @Test
     @Order(3)
     public void getUserTest() throws Exception {
-        LOGGER.info("@Test: (outer); getUserTest()");
+        LOGGER.info("@Test: getUserTest()");
         mockMvc.perform(get("/users/1")
         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -88,7 +88,7 @@ public class UserControllerTest {
     @Test
     @Order(4)
     public void updateUserTest() throws Exception {
-        LOGGER.info("@Test: (outer); updateUserTest()");
+        LOGGER.info("@Test: updateUserTest()");
         mockMvc.perform(put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -110,7 +110,7 @@ public class UserControllerTest {
     @Test
     @Order(5)
     public void deleteUserTest() throws Exception {
-        LOGGER.info("@Test: (outer); deleteUserTest()");
+        LOGGER.info("@Test: deleteUserTest()");
         mockMvc.perform(delete("/users/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

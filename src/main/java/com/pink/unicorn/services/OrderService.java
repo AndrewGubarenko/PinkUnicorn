@@ -47,7 +47,7 @@ public class OrderService implements IOrderService {
     public PlainOrder updateOrder(Order resource, Long id) throws EmptyDataException{
         Optional<Order> orderForUpdateOpt = orderRepository.findById(id);
         if (!orderForUpdateOpt.isPresent()) {
-            throw new EmptyDataException("No order with id " + id + " exists!" );
+            throw new EmptyDataException(new StringBuilder("No order with id ").append(id).append(" exists!").toString());
         }
         Order target = orderForUpdateOpt.get();
 
@@ -71,7 +71,7 @@ public class OrderService implements IOrderService {
     public PlainOrder getOrder(Long id) throws EmptyDataException {
         Optional<Order> orderOpt = orderRepository.findById(id);
         if (!orderOpt.isPresent()) {
-            throw new EmptyDataException("No order with id " + id + " exists!" );
+            throw new EmptyDataException(new StringBuilder("No order with id ").append(id).append(" exists!").toString());
         }
         return orderConverter.OrderToPlain(orderOpt.get());
     }

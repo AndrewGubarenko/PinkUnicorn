@@ -34,7 +34,7 @@ public class UserServiceExceptionTest {
 
     @BeforeAll
     public static void init() {
-        LOGGER.info("@BeforeAll: (outer); init()");
+        LOGGER.info("@BeforeAll: init()");
 
         user = new User();
         user.setEmail("qwerty@qwe.qw");
@@ -47,12 +47,12 @@ public class UserServiceExceptionTest {
 
     @BeforeEach
     public void setUp() {
-        LOGGER.info("@BeforeEach: (outer); setUp()");
+        LOGGER.info("@BeforeEach: setUp()");
     }
 
     @AfterAll
     public static void tearDown() {
-        LOGGER.info("@AfterAll: (outer); tearDown()");
+        LOGGER.info("@AfterAll: tearDown()");
     }
 
     @Test

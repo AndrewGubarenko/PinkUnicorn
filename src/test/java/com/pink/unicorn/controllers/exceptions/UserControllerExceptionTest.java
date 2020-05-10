@@ -36,20 +36,20 @@ public class UserControllerExceptionTest {
 
     @BeforeEach
     public void setUp() {
-        LOGGER.info("@BeforeEach: (outer); setUp()");
+        LOGGER.info("@BeforeEach: setUp()");
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.userController).build();
     }
 
     @Test
     public void test() {
-        LOGGER.info("@Test: (outer); test()");
+        LOGGER.info("@Test: test()");
         assertNotNull(userController);
         assertNotNull(mockMvc);
     }
 
     @Test
     public void onConflictingUserEmailTest() throws Exception{
-        LOGGER.info("@Test: (outer); onConflictingUserEmailTest()");
+        LOGGER.info("@Test: onConflictingUserEmailTest()");
         mockMvc.perform(post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -71,7 +71,7 @@ public class UserControllerExceptionTest {
 
     @Test
     public void onEmptyDataExceptionTest() throws Exception {
-        LOGGER.info("@Test: (outer); onEmptyDataExceptionTest()");
+        LOGGER.info("@Test: onEmptyDataExceptionTest()");
         mockMvc.perform(post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
@@ -86,7 +86,7 @@ public class UserControllerExceptionTest {
 
     @Test
     public void onMissingUserTest() throws Exception {
-        LOGGER.info("@Test: (outer); onMissingUserTest()");
+        LOGGER.info("@Test: onMissingUserTest()");
         mockMvc.perform(get("/users/3")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

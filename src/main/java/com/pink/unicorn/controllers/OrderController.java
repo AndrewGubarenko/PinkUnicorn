@@ -67,31 +67,39 @@ public class OrderController {
      */
     @ExceptionHandler
     public ResponseEntity<String> onEmptyData(EmptyDataException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getLocalizedMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingProduct(EmptyResultDataAccessException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such order was found");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(": No such order was found")
+                                                                        .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> onMissingProductId(NoSuchElementException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ClassUtils.getShortName(e.getClass()) + ": No such order was found");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                        .append(": No such order was found")
+                .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleIOException(IOException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": Check the arguments!");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(": Check the arguments!")
+                                                                    .toString());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleSQLException(SQLException e) {
-        LOGGER.error(ClassUtils.getShortName(e.getClass()) + ": " + e.getLocalizedMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ClassUtils.getShortName(e.getClass()) + ": SQL statement problem");
+        LOGGER.error(new StringBuilder(ClassUtils.getShortName(e.getClass())).append(": ").append(e.getLocalizedMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringBuilder(ClassUtils.getShortName(e.getClass()))
+                                                                    .append(": SQL statement problem")
+                                                                    .toString());
     }
 }
